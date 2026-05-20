@@ -1,49 +1,53 @@
 <app-page-breadcrumb pageTitle="Matriculación" />
 
 <div class="flex flex-col gap-6">
-<app-programa-selector
-  [seleccion]="seleccionPrograma()"
-  (versionChange)="onVersionChange($event)"
-  (gestionChange)="onGestionProgramaChange($event)"
-  (sedeChange)="onSedeChange($event)"
-  (modalidadChange)="onModalidadChange($event)"
-  (verDetalle)="onVerDetallePrograma()"
-/>
-
-<div class="card">
-  <div class="flex flex-col gap-1 px-5 pt-5 sm:px-6 sm:pt-6">
-    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-      Lista de Matrículas
-    </h3>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      Gestiona las matrículas del año académico {{ filtro().gestion }} · {{ totalFiltradas().length }} resultados
-    </p>
-  </div>
-
-  <app-matricula-toolbar
-    [busqueda]="filtro().busqueda"
-    [estado]="filtro().estado"
-    [gestion]="filtro().gestion"
-    [periodo]="filtro().periodo"
-    [conteoPorEstado]="conteoPorEstado()"
-    (busquedaChange)="onBusquedaChange($event)"
-    (estadoChange)="onEstadoChange($event)"
-    (gestionChange)="onGestionChange($event)"
-    (periodoChange)="onPeriodoChange($event)"
-    (nuevaMatricula)="onNuevaMatricula()"
-    (exportar)="onExportar()"
-    (abrirFiltros)="onAbrirFiltros()"
+  <app-programa-selector
+    [seleccion]="seleccionPrograma()"
+    [programas]="programasFiltrados()"
+    (versionChange)="onVersionChange($event)"
+    (gestionChange)="onGestionProgramaChange($event)"
+    (sedeChange)="onSedeChange($event)"
+    (modalidadChange)="onModalidadChange($event)"
+    (programaChange)="onProgramaChange($event)"
+    (verDetalle)="onVerDetallePrograma()"
   />
 
-  <app-matricula-table
-    [matriculas]="matriculas()"
-    [paginaActual]="pagina()"
-    [totalPaginas]="totalPaginas()"
-    [porPagina]="porPagina()"
-    (paginaChange)="onPaginaChange($event)"
-    (verDetalle)="onVerDetalle($event)"
-    (editar)="onEditar($event)"
-    (eliminar)="onEliminar($event)"
-  />
-</div>
+  @if (seleccionPrograma().programa) {
+    <div @fadeSlideUp class="card">
+      <div class="flex flex-col gap-1 px-5 pt-5 sm:px-6 sm:pt-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Lista de personas matriculadas</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Gestiona las matrículas del año académico {{ filtro().gestion }} · {{ totalFiltradas().length }} resultados
+        </p>
+      </div>
+
+      <app-matricula-toolbar
+        [busqueda]="filtro().busqueda"
+        [estado]="filtro().estado"
+        [gestion]="filtro().gestion"
+        [periodo]="filtro().periodo"
+        [conteoPorEstado]="conteoPorEstado()"
+        (busquedaChange)="onBusquedaChange($event)"
+        (estadoChange)="onEstadoChange($event)"
+        (gestionChange)="onGestionChange($event)"
+        (periodoChange)="onPeriodoChange($event)"
+        (nuevaMatricula)="onNuevaMatricula()"
+        (exportar)="onExportar()"
+        (abrirFiltros)="onAbrirFiltros()"
+      />
+
+      <app-matricula-table
+        [matriculas]="matriculas()"
+        [paginaActual]="pagina()"
+        [totalPaginas]="totalPaginas()"
+        [porPagina]="porPagina()"
+        [gestionActual]="filtro().gestion"
+        (paginaChange)="onPaginaChange($event)"
+        (verDetalle)="onVerDetalle($event)"
+        (editar)="onEditar($event)"
+        (eliminar)="onEliminar($event)"
+        (matricular)="onMatricular($event)"
+      />
+    </div>
+  }
 </div>

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
 import { SelectComponent, SelectOption } from '../../../../shared/components/form/select/select.component';
-import { EstadoMatricula } from '../../models/matricula.model';
+import { EstadoMatricula } from '../../models';
 
 type EstadoFiltro = EstadoMatricula | 'todos';
 

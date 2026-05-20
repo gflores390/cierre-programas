@@ -101,7 +101,21 @@ export class DataTableComponent<T> {
     }
   }
 
-  pageNumbers(): number[] {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+  pageNumbers(): (number | null)[] {
+    const total = this.totalPages();
+    const current = this.currentPage();
+
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    const pages: (number | null)[] = [1];
+    const rangeStart = Math.max(2, current - 1);
+    const rangeEnd = Math.min(total - 1, current + 1);
+
+    if (rangeStart > 2) pages.push(null);
+    for (let i = rangeStart; i <= rangeEnd; i++) pages.push(i);
+    if (rangeEnd < total - 1) pages.push(null);
+    pages.push(total);
+
+    return pages;
   }
 }

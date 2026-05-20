@@ -3,7 +3,7 @@ import { Component, ElementRef, QueryList, ViewChildren, ChangeDetectorRef, inje
 import { SidebarService } from '../../services/sidebar.service';
 import { SettingsService } from '../../services/settings.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { SafeHtmlPipe } from '../../pipe/safe-html.pipe';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { combineLatest, Subscription } from 'rxjs';
 import { MAIN_NAV_ITEMS, OTHERS_NAV_ITEMS, NavItem } from '../../config/nav-items';
 

@@ -7,104 +7,141 @@
   emptyMessage="No se encontraron matrículas con los filtros aplicados."
   (pageIndexChange)="onPageChange($event)"
 >
+  <!-- Nº -->
   <ng-template appColumn="indice" [appColumnTypeOf]="matriculas()" let-_ let-i="index">
-    <span class="text-gray-500 dark:text-gray-400">{{ indiceGlobal(i) }}</span>
+    <span class="text-gray-400 dark:text-gray-500">{{ indiceGlobal(i) }}</span>
   </ng-template>
 
+  <!-- Apellidos y Nombres -->
   <ng-template appColumn="estudiante" [appColumnTypeOf]="matriculas()" let-row>
     <div class="flex items-center gap-3">
-      <div class="h-10 w-10 overflow-hidden rounded-full bg-gray-100 dark:bg-white/[0.05]">
+      <div class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-gray-100 dark:bg-white/[0.05]">
         @if (row.estudiante.avatar) {
-          <img
-            width="40"
-            height="40"
-            [src]="row.estudiante.avatar"
-            [alt]="row.estudiante.nombres"
-          />
+          <img width="36" height="36" [src]="row.estudiante.avatar" [alt]="row.estudiante.nombres" />
         }
       </div>
-      <div>
-        <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-          {{ row.estudiante.nombres }} {{ row.estudiante.apellidos }}
+      <div class="min-w-0">
+        <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90 truncate">
+          {{ row.estudiante.apellidos }} {{ row.estudiante.nombres }}
         </span>
-        <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
+        <span class="block text-gray-400 text-theme-xs dark:text-gray-500">
           {{ row.codigo }}
         </span>
       </div>
     </div>
   </ng-template>
 
-  <ng-template appColumn="tutor" [appColumnTypeOf]="matriculas()" let-row>
-    <span class="block text-gray-700 text-theme-sm dark:text-gray-300">
-      {{ row.tutor.nombre }}
-    </span>
-    <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-      {{ row.tutor.parentesco }}
-    </span>
-  </ng-template>
-
-  <ng-template appColumn="contacto" [appColumnTypeOf]="matriculas()" let-row>
-    <span class="block text-gray-700 text-theme-sm dark:text-gray-300">
-      {{ row.contacto.telefono }}
-    </span>
-    @if (row.contacto.email) {
-      <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-        {{ row.contacto.email }}
-      </span>
+  <!-- Foto -->
+  <ng-template appColumn="foto" [appColumnTypeOf]="matriculas()" let-row>
+    @if (row.tieneFoto) {
+      <button
+        type="button"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-success-200 bg-success-50 text-success-600 transition-colors hover:bg-success-100 dark:border-success-500/30 dark:bg-success-500/10 dark:text-success-400 dark:hover:bg-success-500/20"
+        title="Ver foto"
+        (click)="verDocumento(row, 'foto')"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 17C14.2091 17 16 15.2091 16 13C16 10.7909 14.2091 9 12 9C9.79086 9 8 10.7909 8 13C8 15.2091 9.79086 17 12 17Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    } @else {
+      <span class="text-gray-300 dark:text-gray-600 select-none">—</span>
     }
   </ng-template>
 
+  <!-- Boleta -->
+  <ng-template appColumn="boleta" [appColumnTypeOf]="matriculas()" let-row>
+    @if (row.tieneBoleta) {
+      <button
+        type="button"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-success-200 bg-success-50 text-success-600 transition-colors hover:bg-success-100 dark:border-success-500/30 dark:bg-success-500/10 dark:text-success-400 dark:hover:bg-success-500/20"
+        title="Ver boleta"
+        (click)="verDocumento(row, 'boleta')"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 2V8H20M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    } @else {
+      <span class="text-gray-300 dark:text-gray-600 select-none">—</span>
+    }
+  </ng-template>
+
+  <!-- Total Grados -->
+  <ng-template appColumn="totalGrados" [appColumnTypeOf]="matriculas()" let-row>
+    <span
+      class="inline-flex h-6 w-6 items-center justify-center rounded text-xs font-bold"
+      [class]="row.totalGrados === 0
+        ? 'bg-error-100 text-error-600 dark:bg-error-500/20 dark:text-error-400'
+        : 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300'"
+    >
+      {{ row.totalGrados }}
+    </span>
+  </ng-template>
+
+  <!-- Formularios -->
+  <ng-template appColumn="formularios" [appColumnTypeOf]="matriculas()" let-row>
+    <button
+      type="button"
+      class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
+      (click)="verDetalle.emit(row)"
+      title="Ver formularios"
+    >
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 2H14C15.1046 2 16 2.89543 16 4V16C16 17.1046 15.1046 18 14 18H6C4.89543 18 4 17.1046 4 16V4C4 2.89543 4.89543 2 6 2Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M7 7H13M7 10H13M7 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </ng-template>
+
+  <!-- Estado -->
   <ng-template appColumn="estado" [appColumnTypeOf]="matriculas()" let-row>
     <app-badge size="sm" [color]="colorEstado(row.estado)">
       {{ etiquetaEstado(row.estado) }}
     </app-badge>
   </ng-template>
 
+  <!-- Matricular -->
+  <ng-template appColumn="matricular" [appColumnTypeOf]="matriculas()" let-row>
+    <app-button
+      size="sm"
+      variant="primary"
+      className="whitespace-nowrap"
+      (btnClick)="matricular.emit(row)"
+    >
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Matricular {{ gestionActual() }}
+    </app-button>
+  </ng-template>
+
+  <!-- Acciones -->
   <ng-template appColumn="acciones" [appColumnTypeOf]="matriculas()" let-row>
-    <div class="relative inline-block">
-      <app-table-dropdown>
-        <div dropdown-button>
-          <button class="text-gray-500 dark:text-gray-400" aria-label="Acciones">
-            <svg
-              class="fill-current"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M5.99902 10.245C6.96552 10.245 7.74902 11.0285 7.74902 11.995V12.005C7.74902 12.9715 6.96552 13.755 5.99902 13.755C5.03253 13.755 4.24902 12.9715 4.24902 12.005V11.995C4.24902 11.0285 5.03253 10.245 5.99902 10.245ZM17.999 10.245C18.9655 10.245 19.749 11.0285 19.749 11.995V12.005C19.749 12.9715 18.9655 13.755 17.999 13.755C17.0325 13.755 16.249 12.9715 16.249 12.005V11.995C16.249 11.0285 17.0325 10.245 17.999 10.245ZM13.749 11.995C13.749 11.0285 12.9655 10.245 11.999 10.245C11.0325 10.245 10.249 11.0285 10.249 11.995V12.005C10.249 12.9715 11.0325 13.755 11.999 13.755C12.9655 13.755 13.749 12.9715 13.749 12.005V11.995Z"
-              />
-            </svg>
-          </button>
-        </div>
-        <div dropdown-content>
-          <button
-            type="button"
-            (click)="verDetalle.emit(row)"
-            class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-          >
-            Ver detalle
-          </button>
-          <button
-            type="button"
-            (click)="editar.emit(row)"
-            class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-          >
-            Editar
-          </button>
-          <button
-            type="button"
-            (click)="eliminar.emit(row)"
-            class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-error-500 hover:bg-error-50 dark:hover:bg-error-500/10"
-          >
-            Eliminar
-          </button>
-        </div>
-      </app-table-dropdown>
-    </div>
+    <app-table-dropdown>
+      <div dropdown-button>
+        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300" aria-label="Más acciones">
+          <svg class="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.99902 10.245C6.96552 10.245 7.74902 11.0285 7.74902 11.995V12.005C7.74902 12.9715 6.96552 13.755 5.99902 13.755C5.03253 13.755 4.24902 12.9715 4.24902 12.005V11.995C4.24902 11.0285 5.03253 10.245 5.99902 10.245ZM17.999 10.245C18.9655 10.245 19.749 11.0285 19.749 11.995V12.005C19.749 12.9715 18.9655 13.755 17.999 13.755C17.0325 13.755 16.249 12.9715 16.249 12.005V11.995C16.249 11.0285 17.0325 10.245 17.999 10.245ZM13.749 11.995C13.749 11.0285 12.9655 10.245 11.999 10.245C11.0325 10.245 10.249 11.0285 10.249 11.995V12.005C10.249 12.9715 11.0325 13.755 11.999 13.755C12.9655 13.755 13.749 12.9715 13.749 12.005V11.995Z"/>
+          </svg>
+        </button>
+      </div>
+      <div dropdown-content>
+        <button type="button" (click)="verDetalle.emit(row)"
+          class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+          Ver detalle
+        </button>
+        <button type="button" (click)="editar.emit(row)"
+          class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+          Editar
+        </button>
+        <button type="button" (click)="eliminar.emit(row)"
+          class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-error-500 hover:bg-error-50 dark:hover:bg-error-500/10">
+          Eliminar
+        </button>
+      </div>
+    </app-table-dropdown>
   </ng-template>
 </app-data-table>

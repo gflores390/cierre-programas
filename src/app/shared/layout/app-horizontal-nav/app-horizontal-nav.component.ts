@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { SafeHtmlPipe } from '../../pipe/safe-html.pipe';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { MAIN_NAV_ITEMS, OTHERS_NAV_ITEMS, NavItem } from '../../config/nav-items';
 
 @Component({

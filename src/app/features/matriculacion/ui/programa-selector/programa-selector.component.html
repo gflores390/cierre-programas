@@ -3,11 +3,13 @@
     <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">
       1. Seleccione el programa
     </h3>
-    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-success-500 text-white">
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </span>
+    @if (programaCompleto()) {
+      <span class="flex h-7 w-7 items-center justify-center rounded-full bg-success-500 text-white">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    }
   </div>
 
   <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
@@ -44,27 +46,109 @@
         variant="outline"
         size="sm"
         className="w-full h-11"
+        [disabled]="!programaCompleto()"
         (btnClick)="verDetalle.emit()"
       >
         <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0001 4.16669C5.93673 4.16669 2.55339 7.04169 1.69173 10C2.55339 12.9584 5.93673 15.8334 10.0001 15.8334C14.0634 15.8334 17.4467 12.9584 18.3084 10C17.4467 7.04169 14.0634 4.16669 10.0001 4.16669ZM10.0001 13.3334C8.16006 13.3334 6.66673 11.84 6.66673 10C6.66673 8.16002 8.16006 6.66669 10.0001 6.66669C11.8401 6.66669 13.3334 8.16002 13.3334 10C13.3334 11.84 11.8401 13.3334 10.0001 13.3334ZM10.0001 8.33335C9.08006 8.33335 8.33339 9.08002 8.33339 10C8.33339 10.92 9.08006 11.6667 10.0001 11.6667C10.9201 11.6667 11.6667 10.92 11.6667 10C11.6667 9.08002 10.9201 8.33335 10.0001 8.33335Z" fill=""/>
         </svg>
-        Ver detalle del programa
+        Ver detalle
       </app-button>
     </div>
   </div>
 
-  @if (programaCompleto()) {
-    <div class="mt-5 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 dark:border-brand-500/20 dark:bg-brand-500/10">
-      <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 6.25V10.4167M10 13.75H10.0083M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="currentColor" stroke-width="1.66" stroke-linecap="round" stroke-linejoin="round"/>
+  @if (!programaCompleto()) {
+    <div class="mt-5 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+      <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-2.5 dark:border-gray-700">
+        <svg class="shrink-0 text-gray-400 dark:text-gray-500" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </span>
-      <p class="text-sm text-gray-700 dark:text-gray-300">
-        <span class="font-medium text-gray-800 dark:text-white/90">Programa seleccionado:</span>
-        {{ programaCompleto() }}
-      </p>
+        <input
+          type="text"
+          placeholder="Buscar por nombre, turno o modalidad…"
+          class="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none dark:text-gray-200 dark:placeholder-gray-500"
+          [(ngModel)]="busqueda"
+        />
+        @if (busqueda()) {
+          <button
+            type="button"
+            class="shrink-0 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+            (click)="busqueda.set('')"
+            aria-label="Limpiar búsqueda"
+          >
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+          </button>
+        }
+      </div>
+      @if (programasVisibles().length === 0) {
+        <div class="flex flex-col items-center gap-2 py-10 text-center">
+          <svg class="text-gray-300 dark:text-gray-600" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Sin resultados</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500">
+            {{ busqueda() ? 'No hay programas que coincidan con "' + busqueda() + '".' : 'Ajusta los filtros para ver programas disponibles.' }}
+          </p>
+        </div>
+      } @else {
+        <ul class="divide-y divide-gray-100 dark:divide-gray-700/60">
+          @for (programa of programasVisibles(); track programa.id) {
+            <li>
+              <button
+                type="button"
+                class="group w-full px-4 py-3.5 flex items-center gap-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03]"
+                (click)="seleccionarPrograma(programa)"
+              >
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-800 dark:text-white/90 truncate">
+                    {{ programa.nombre }} — Turno {{ programa.turno }}
+                  </p>
+                  <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    {{ programa.modalidad | titlecase }} · Gestión {{ programa.gestion }}
+                  </p>
+                </div>
+                <div class="shrink-0 text-right">
+                  @let disponibles = programa.cupos - programa.inscritos;
+                  <p class="text-xs font-semibold" [class]="disponibles > 5 ? 'text-success-600 dark:text-success-400' : disponibles > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-error-500'">
+                    {{ disponibles > 0 ? disponibles + ' cupos' : 'Sin cupos' }}
+                  </p>
+                  <p class="text-[11px] text-gray-400 dark:text-gray-500">de {{ programa.cupos }}</p>
+                </div>
+                <span class="shrink-0 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:border-brand-400 group-hover:bg-brand-50 group-hover:text-brand-600 dark:group-hover:border-brand-500 dark:group-hover:bg-brand-500/10 dark:group-hover:text-brand-400">
+                  Seleccionar
+                </span>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+
+  @if (programaCompleto()) {
+    <div class="mt-5 flex items-center justify-between gap-3 rounded-xl border border-success-200 bg-success-50 px-4 py-3 dark:border-success-500/20 dark:bg-success-500/10">
+      <div class="flex items-center gap-3">
+        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-500 text-white">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <p class="text-sm text-gray-700 dark:text-gray-300">
+          <span class="font-medium text-gray-800 dark:text-white/90">Programa seleccionado:</span>
+          {{ programaCompleto() }}
+        </p>
+      </div>
+      <button
+        type="button"
+        class="shrink-0 text-xs font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+        (click)="cambiarPrograma()"
+      >
+        Cambiar
+      </button>
     </div>
   }
 </div>

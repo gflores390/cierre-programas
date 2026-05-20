@@ -12,6 +12,7 @@
   "dependencies": {
     "@amcharts/amcharts5": "^5.13.5",
     "@amcharts/amcharts5-geodata": "^5.1.4",
+    "@angular/animations": "^21.2.13",
     "@angular/cdk": "^21.2.2",
     "@angular/common": "^21.2.4",
     "@angular/compiler": "^21.2.4",

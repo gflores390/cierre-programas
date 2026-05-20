@@ -1,0 +1,79 @@
+<!-- Encabezado -->
+<div class="mb-6 flex items-start gap-4">
+  <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-500/10">
+    <svg class="text-brand-500" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 11L12 14L22 4M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div>
+    <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Confirmar Matrícula</h4>
+    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+      Gestión {{ gestion() }} · {{ programa() }}
+    </p>
+  </div>
+</div>
+
+<!-- Datos del estudiante -->
+<div class="rounded-2xl border border-gray-100 bg-gray-50 p-4 dark:border-white/[0.06] dark:bg-white/[0.03]">
+  <div class="flex items-center gap-3">
+    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+      @if (matricula().estudiante.avatar) {
+        <img width="48" height="48" [src]="matricula().estudiante.avatar" [alt]="matricula().estudiante.nombres" />
+      }
+    </div>
+    <div class="min-w-0">
+      <p class="font-semibold text-gray-800 dark:text-white/90">
+        {{ matricula().estudiante.apellidos }} {{ matricula().estudiante.nombres }}
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">{{ matricula().codigo }}</p>
+    </div>
+  </div>
+
+  <div class="mt-4 grid grid-cols-2 gap-3">
+    <div>
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">CI</p>
+      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().ci }}</p>
+    </div>
+    <div>
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">RUDE</p>
+      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().rude }}</p>
+    </div>
+    <div>
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Curso</p>
+      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().curso }}</p>
+    </div>
+    <div>
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Estado</p>
+      <div class="mt-0.5">
+        <app-badge size="sm"
+          [color]="matricula().estado === 'activo' ? 'success'
+                 : matricula().estado === 'suspendido' ? 'warning'
+                 : matricula().estado === 'retirado' ? 'error' : 'info'">
+          {{ matricula().estado | titlecase }}
+        </app-badge>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Aviso -->
+<div class="mt-4 flex items-start gap-2 rounded-xl bg-warning-50 px-4 py-3 dark:bg-warning-500/10">
+  <svg class="mt-0.5 shrink-0 text-warning-500" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 6.25V10.4167M10 13.75H10.0083M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <p class="text-xs text-warning-700 dark:text-warning-400">
+    Esta acción registrará la matrícula en el programa
+    <strong>{{ programa() }}</strong> para la gestión <strong>{{ gestion() }}</strong>.
+  </p>
+</div>
+
+<!-- Botones -->
+<div class="mt-6 flex items-center justify-end gap-3">
+  <app-button variant="outline" size="sm" (btnClick)="onCerrar()">Cancelar</app-button>
+  <app-button variant="primary" size="sm" (btnClick)="onConfirmar()">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Confirmar Matrícula {{ gestion() }}
+  </app-button>
+</div>

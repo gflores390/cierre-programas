@@ -23,9 +23,14 @@ export interface Contacto {
 export interface Matricula {
   id: number;
   codigo: string;
+  ci: string;
   estudiante: Estudiante;
   rude: string;
+  ru: number;
   curso: string;
+  totalGrados: number;
+  tieneFoto: boolean;
+  tieneBoleta: boolean;
   tutor: Tutor;
   contacto: Contacto;
   estado: EstadoMatricula;
@@ -36,6 +41,18 @@ export interface MatriculaFiltro {
   estado: EstadoMatricula | 'todos';
   gestion: string;
   periodo: string;
+}
+
+export interface Programa {
+  id: number;
+  nombre: string;
+  turno: string;
+  version: string;
+  gestion: string;
+  sede: string;
+  modalidad: string;
+  cupos: number;
+  inscritos: number;
 }
 
 export interface SeleccionPrograma {
