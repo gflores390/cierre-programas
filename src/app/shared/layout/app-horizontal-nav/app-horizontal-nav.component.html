@@ -1,0 +1,70 @@
+<nav
+  class="sticky top-0 z-40 hidden w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 xl:block"
+>
+  <div class="mx-auto flex max-w-(--breakpoint-2xl) items-center gap-1 px-6 py-2">
+    @for (item of items; track item.name; let i = $index) {
+      @if (item.subItems && item.subItems.length > 0) {
+        <div class="relative">
+          <button
+            type="button"
+            (click)="toggle(i)"
+            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/[0.04] dark:hover:text-white"
+            [class.bg-gray-50]="openIndex === i"
+            [class.text-gray-900]="openIndex === i"
+            [class.dark:bg-white]="openIndex === i"
+          >
+            <span class="size-5" [innerHTML]="item.icon | safeHtml"></span>
+            <span>{{ item.name }}</span>
+            <svg
+              class="size-4 transition-transform duration-200"
+              [class.rotate-180]="openIndex === i"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          @if (openIndex === i) {
+            <div
+              class="absolute left-0 top-full z-50 mt-2 min-w-[200px] rounded-xl border border-gray-200 bg-white p-1.5 shadow-dropdown dark:border-gray-800 dark:bg-gray-900"
+            >
+              <ul class="flex flex-col gap-0.5">
+                @for (sub of item.subItems; track sub.path) {
+                  <li>
+                    <a
+                      [routerLink]="sub.path"
+                      routerLinkActive="bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400"
+                      (click)="cerrar()"
+                      class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/[0.04] dark:hover:text-white"
+                    >
+                      <span>{{ sub.name }}</span>
+                      @if (sub.new) {
+                        <span class="rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-500">new</span>
+                      }
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      } @else if (item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-brand-50 text-brand-500 dark:bg-white/[0.06] dark:text-brand-400"
+          class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/[0.04] dark:hover:text-white"
+        >
+          <span class="size-5" [innerHTML]="item.icon | safeHtml"></span>
+          <span>{{ item.name }}</span>
+        </a>
+      }
+    }
+  </div>
+</nav>

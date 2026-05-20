@@ -1,5 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { SidebarService } from '../../services/sidebar.service';
+import { SettingsService } from '../../services/settings.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ThemeToggleButtonComponent } from '../../components/common/theme-toggle/theme-toggle-button.component';
@@ -20,6 +21,7 @@ import { UserDropdownComponent } from '../../components/header/user-dropdown/use
 export class AppHeaderComponent {
   isApplicationMenuOpen = false;
   readonly isMobileOpen$;
+  private readonly settings = inject(SettingsService);
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
@@ -27,8 +29,13 @@ export class AppHeaderComponent {
     this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
   }
 
+  abrirSettings(): void {
+    this.settings.open();
+  }
+
   handleToggle() {
     if (window.innerWidth >= 1280) {
+      if (this.settings.navLayout() === 'mini' || this.settings.navLayout() === 'horizontal') return;
       this.sidebarService.toggleExpanded();
     } else {
       this.sidebarService.toggleMobileOpen();

@@ -1,0 +1,70 @@
+<div class="card p-5 sm:p-6">
+  <div class="flex items-center justify-between gap-3">
+    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">
+      1. Seleccione el programa
+    </h3>
+    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-success-500 text-white">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </div>
+
+  <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+    <app-select
+      label="Versión"
+      [options]="versiones"
+      [value]="seleccion().version"
+      (valueChange)="versionChange.emit($event)"
+    />
+
+    <app-select
+      label="Gestión"
+      [options]="gestiones"
+      [value]="seleccion().gestion"
+      (valueChange)="gestionChange.emit($event)"
+    />
+
+    <app-select
+      label="Sede"
+      [options]="sedes"
+      [value]="seleccion().sede"
+      (valueChange)="sedeChange.emit($event)"
+    />
+
+    <app-select
+      label="Modalidad"
+      [options]="modalidades"
+      [value]="seleccion().modalidad"
+      (valueChange)="modalidadChange.emit($event)"
+    />
+
+    <div class="lg:col-span-1">
+      <app-button
+        variant="outline"
+        size="sm"
+        className="w-full h-11"
+        (btnClick)="verDetalle.emit()"
+      >
+        <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0001 4.16669C5.93673 4.16669 2.55339 7.04169 1.69173 10C2.55339 12.9584 5.93673 15.8334 10.0001 15.8334C14.0634 15.8334 17.4467 12.9584 18.3084 10C17.4467 7.04169 14.0634 4.16669 10.0001 4.16669ZM10.0001 13.3334C8.16006 13.3334 6.66673 11.84 6.66673 10C6.66673 8.16002 8.16006 6.66669 10.0001 6.66669C11.8401 6.66669 13.3334 8.16002 13.3334 10C13.3334 11.84 11.8401 13.3334 10.0001 13.3334ZM10.0001 8.33335C9.08006 8.33335 8.33339 9.08002 8.33339 10C8.33339 10.92 9.08006 11.6667 10.0001 11.6667C10.9201 11.6667 11.6667 10.92 11.6667 10C11.6667 9.08002 10.9201 8.33335 10.0001 8.33335Z" fill=""/>
+        </svg>
+        Ver detalle del programa
+      </app-button>
+    </div>
+  </div>
+
+  @if (programaCompleto()) {
+    <div class="mt-5 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 dark:border-brand-500/20 dark:bg-brand-500/10">
+      <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 6.25V10.4167M10 13.75H10.0083M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="currentColor" stroke-width="1.66" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <p class="text-sm text-gray-700 dark:text-gray-300">
+        <span class="font-medium text-gray-800 dark:text-white/90">Programa seleccionado:</span>
+        {{ programaCompleto() }}
+      </p>
+    </div>
+  }
+</div>

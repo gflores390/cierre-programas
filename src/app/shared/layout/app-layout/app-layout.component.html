@@ -1,21 +1,21 @@
 <div class="min-h-screen xl:flex">
-  <div>
-    <app-sidebar></app-sidebar>
-    <app-backdrop></app-backdrop>
-  </div>
+  @if (navLayout() !== 'horizontal') {
+    <div>
+      <app-sidebar></app-sidebar>
+      <app-backdrop></app-backdrop>
+    </div>
+  }
   <div
-      class="flex-1 transition-all duration-300 ease-in-out"
-      [ngClass]="{
-        'xl:ml-[290px]': (isExpanded$ | async) || (isHovered$ | async),
-        'xl:ml-[90px]': !(isExpanded$ | async) && !(isHovered$ | async),
-        'ml-0': (isMobileOpen$ | async)
-      }"
+    class="flex-1 transition-all duration-300 ease-in-out"
+    [ngClass]="[mainMarginClass(), mobileMarginClass()]"
   >
-    <!-- app header start -->
-    <app-header/>
-    <!-- app header end -->
+    <app-header />
+    @if (navLayout() === 'horizontal') {
+      <app-horizontal-nav />
+    }
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
       <router-outlet></router-outlet>
     </div>
   </div>
 </div>
+<app-settings-drawer />

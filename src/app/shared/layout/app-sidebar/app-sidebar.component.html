@@ -159,17 +159,17 @@
                         : '0px'
                   }"
                 >
-                  <ul class="mt-2 space-y-1 ml-9">
+                  <ul class="mt-1 ml-[22px] space-y-0.5 border-l border-gray-200 pl-5 dark:border-gray-800">
                     @for (subItem of nav.subItems; track $index) {
                     <li>
                       <a
                         [routerLink]="subItem.path"
                         routerLinkActive=""
                         (click)="onSubmenuClick()"
-                        class="menu-dropdown-item"
+                        class="menu-dropdown-item before:absolute before:-left-[26px] before:top-1/2 before:size-1.5 before:-translate-y-1/2 before:rounded-full before:transition-all"
                         [ngClass]="{
-                              'menu-dropdown-item-inactive': !isActive(subItem.path),
-                              'menu-dropdown-item-active': isActive(subItem.path),
+                              'menu-dropdown-item-inactive before:bg-gray-300 dark:before:bg-gray-700 hover:before:bg-brand-500': !isActive(subItem.path),
+                              'menu-dropdown-item-active before:bg-brand-500 before:size-2': isActive(subItem.path),
                             }"
                       >
                         {{ subItem.name }}
@@ -243,10 +243,8 @@
         </div>
         <!-- end main menu -->
 
-        <!-- Support Section -->
-        <!-- end support section -->
-
         <!-- Others Section -->
+        @if (othersItems.length > 0) {
         <div>
           <h2
             class="mb-4 text-xs uppercase flex leading-[20px] text-gray-400"
@@ -365,17 +363,17 @@
                         : '0px'
                   }"
                 >
-                  <ul class="mt-2 space-y-1 ml-9">
+                  <ul class="mt-1 ml-[22px] space-y-0.5 border-l border-gray-200 pl-5 dark:border-gray-800">
                     @for (subItem of nav.subItems; track $index) {
                     <li>
                       <a
                         [routerLink]="subItem.path"
                         routerLinkActive=""
                         (click)="onSubmenuClick()"
-                        class="menu-dropdown-item"
+                        class="menu-dropdown-item before:absolute before:-left-[26px] before:top-1/2 before:size-1.5 before:-translate-y-1/2 before:rounded-full before:transition-all"
                         [ngClass]="{
-                              'menu-dropdown-item-inactive': !isActive(subItem.path),
-                              'menu-dropdown-item-active': isActive(subItem.path),
+                              'menu-dropdown-item-inactive before:bg-gray-300 dark:before:bg-gray-700 hover:before:bg-brand-500': !isActive(subItem.path),
+                              'menu-dropdown-item-active before:bg-brand-500 before:size-2': isActive(subItem.path),
                             }"
                       >
                         {{ subItem.name }}
@@ -447,11 +445,9 @@
             }
           </ul>
         </div>
+        }
         <!-- end other section -->
       </div>
     </nav>
-    @if ((isExpanded$ | async) || (isHovered$ | async) || (isMobileOpen$ | async)) {
-    <app-sidebar-widget />
-    }
   </div>
 </aside>

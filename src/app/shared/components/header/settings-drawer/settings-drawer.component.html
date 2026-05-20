@@ -1,0 +1,275 @@
+@if (isOpen()) {
+  <div
+    class="fixed inset-0 z-[999999] bg-gray-900/40 backdrop-blur-sm transition-opacity"
+    (click)="cerrar()"
+  ></div>
+}
+
+<aside
+  class="fixed right-0 top-0 z-[9999999] flex h-screen w-[360px] max-w-full flex-col bg-white shadow-dropdown transition-transform duration-300 dark:bg-gray-800"
+  [class.translate-x-0]="isOpen()"
+  [class.translate-x-full]="!isOpen()"
+>
+  <header class="flex items-center justify-between px-5 py-4">
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+      Settings
+    </h2>
+    <div class="flex items-center gap-1">
+      <button
+        type="button"
+        class="flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/[0.06]"
+        aria-label="Pantalla completa"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9V3H9M21 9V3H15M3 15V21H9M21 15V21H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button
+        type="button"
+        (click)="resetear()"
+        class="relative flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/[0.06]"
+        aria-label="Reset"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12C3 7.029 7.029 3 12 3C15.279 3 18.149 4.752 19.708 7.358M21 4V8H17M21 12C21 16.971 16.971 21 12 21C8.721 21 5.851 19.248 4.292 16.642M3 20V16H7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        @if (modificado()) {
+          <span class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-error-500"></span>
+        }
+      </button>
+      <button
+        type="button"
+        (click)="cerrar()"
+        class="flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/[0.06]"
+        aria-label="Cerrar"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex-1 overflow-y-auto px-5 pb-6">
+    <div class="grid grid-cols-2 gap-3">
+      <button
+        type="button"
+        (click)="toggleTheme()"
+        class="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4 text-left transition hover:border-gray-300 dark:border-white/[0.06] dark:hover:border-white/[0.12]"
+        [class.bg-brand-50]="isDark()"
+        [class.dark:bg-brand-500\/10]="isDark()"
+      >
+        <div class="flex items-start justify-between">
+          <svg class="text-gray-700 dark:text-white/80" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.5287 15.9294C21.3687 15.6594 20.9187 15.2394 19.7987 15.4394C19.1787 15.5494 18.5487 15.6024 17.9187 15.5724C15.5887 15.4724 13.4787 14.4024 12.0087 12.7524C10.7087 11.2924 9.90873 9.39942 9.89873 7.36042C9.89873 6.22042 10.1187 5.12041 10.5687 4.08041C11.0087 3.07041 10.6987 2.54042 10.4787 2.31542C10.2587 2.09042 9.71873 1.77042 8.65873 2.21042C4.55873 3.93042 2.02873 8.04041 2.32873 12.4604C2.62873 16.6204 5.54873 20.1794 9.43873 21.5094C10.3787 21.8394 11.3687 22.0394 12.3887 22.0794C12.5587 22.0894 12.7287 22.0994 12.8987 22.0994C16.2887 22.0994 19.4687 20.4994 21.4787 17.7794C22.1487 16.8594 21.6987 16.1994 21.5287 15.9294Z" fill="currentColor"/>
+          </svg>
+          <span
+            class="relative inline-flex h-5 w-9 shrink-0 rounded-full transition"
+            [class.bg-brand-500]="isDark()"
+            [class.bg-gray-200]="!isDark()"
+            [class.dark:bg-white\/10]="!isDark()"
+          >
+            <span
+              class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-theme-xs transition-all"
+              [class.left-4]="isDark()"
+              [class.left-0.5]="!isDark()"
+            ></span>
+          </span>
+        </div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white/90">Mode</p>
+      </button>
+
+      <button
+        type="button"
+        (click)="toggleContrast()"
+        class="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4 text-left transition hover:border-gray-300 dark:border-white/[0.06] dark:hover:border-white/[0.12]"
+        [class.bg-brand-50]="contrast()"
+        [class.dark:bg-brand-500\/10]="contrast()"
+      >
+        <div class="flex items-start justify-between">
+          <svg class="text-gray-700 dark:text-white/80" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM12 4V20C7.582 20 4 16.418 4 12C4 7.582 7.582 4 12 4Z" fill="currentColor"/>
+          </svg>
+          <span
+            class="relative inline-flex h-5 w-9 shrink-0 rounded-full transition"
+            [class.bg-brand-500]="contrast()"
+            [class.bg-gray-200]="!contrast()"
+            [class.dark:bg-white\/10]="!contrast()"
+          >
+            <span
+              class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-theme-xs transition-all"
+              [class.left-4]="contrast()"
+              [class.left-0.5]="!contrast()"
+            ></span>
+          </span>
+        </div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white/90">Contrast</p>
+      </button>
+
+      <button
+        type="button"
+        (click)="toggleRtl()"
+        class="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4 text-left transition hover:border-gray-300 dark:border-white/[0.06] dark:hover:border-white/[0.12]"
+        [class.bg-brand-50]="rtl()"
+        [class.dark:bg-brand-500\/10]="rtl()"
+      >
+        <div class="flex items-start justify-between">
+          <svg class="text-gray-700 dark:text-white/80" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 5H10C7.243 5 5 7.243 5 10C5 12.757 7.243 15 10 15H10.5V19M14 5V19M14 5L10 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span
+            class="relative inline-flex h-5 w-9 shrink-0 rounded-full transition"
+            [class.bg-brand-500]="rtl()"
+            [class.bg-gray-200]="!rtl()"
+            [class.dark:bg-white\/10]="!rtl()"
+          >
+            <span
+              class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-theme-xs transition-all"
+              [class.left-4]="rtl()"
+              [class.left-0.5]="!rtl()"
+            ></span>
+          </span>
+        </div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white/90">Right to left</p>
+      </button>
+
+      <button
+        type="button"
+        (click)="toggleCompact()"
+        class="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4 text-left transition hover:border-gray-300 dark:border-white/[0.06] dark:hover:border-white/[0.12]"
+        [class.bg-brand-50]="compact()"
+        [class.dark:bg-brand-500\/10]="compact()"
+      >
+        <div class="flex items-start justify-between">
+          <svg class="text-gray-700 dark:text-white/80" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M8 7L3 12L8 17M16 7L21 12L16 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span
+            class="relative inline-flex h-5 w-9 shrink-0 rounded-full transition"
+            [class.bg-brand-500]="compact()"
+            [class.bg-gray-200]="!compact()"
+            [class.dark:bg-white\/10]="!compact()"
+          >
+            <span
+              class="absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-theme-xs transition-all"
+              [class.left-4]="compact()"
+              [class.left-0.5]="!compact()"
+            ></span>
+          </span>
+        </div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white/90">Compact</p>
+      </button>
+    </div>
+
+    <section class="mt-6 rounded-2xl border border-gray-200 p-4 dark:border-white/[0.06]">
+      <div class="mb-3 flex items-center gap-1.5">
+        <span class="rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-semibold text-white dark:bg-white/[0.08]">Nav</span>
+      </div>
+
+      <p class="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Layout</p>
+      <div class="mb-5 grid grid-cols-3 gap-2">
+        @for (item of layouts; track item.id) {
+          <button
+            type="button"
+            (click)="setLayout(item.id)"
+            class="flex aspect-[4/3] flex-col gap-1 rounded-xl border bg-white p-1.5 transition dark:bg-gray-900"
+            [class.border-brand-500]="navLayout() === item.id"
+            [class.border-gray-200]="navLayout() !== item.id"
+            [class.dark:border-white\/[0.06]]="navLayout() !== item.id"
+            [attr.aria-label]="item.etiqueta"
+          >
+            @if (item.id === 'vertical') {
+              <div class="flex h-full gap-1">
+                <div class="flex w-1/3 flex-col items-center gap-1 rounded bg-white p-1 dark:bg-gray-800">
+                  <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+                  <span class="h-0.5 w-full rounded bg-gray-200 dark:bg-white/10"></span>
+                  <span class="h-0.5 w-full rounded bg-gray-200 dark:bg-white/10"></span>
+                </div>
+                <div class="flex-1 rounded bg-brand-100 dark:bg-brand-500/20"></div>
+              </div>
+            } @else if (item.id === 'horizontal') {
+              <div class="flex h-full flex-col gap-1">
+                <div class="flex h-1/3 items-center gap-1 rounded bg-white px-1 dark:bg-gray-800">
+                  <span class="h-1 w-3 rounded bg-gray-300 dark:bg-white/15"></span>
+                  <span class="h-1 w-3 rounded bg-gray-300 dark:bg-white/15"></span>
+                </div>
+                <div class="flex-1 rounded bg-gray-100 dark:bg-white/[0.04]"></div>
+              </div>
+            } @else {
+              <div class="flex h-full gap-1">
+                <div class="flex w-1/5 flex-col items-center justify-start gap-1 rounded bg-white p-1 dark:bg-gray-800">
+                  <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+                  <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-white/15"></span>
+                </div>
+                <div class="flex-1 rounded bg-gray-100 dark:bg-white/[0.04]"></div>
+              </div>
+            }
+          </button>
+        }
+      </div>
+
+      <p class="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Color</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          (click)="setNavColor('integrate')"
+          class="flex items-center gap-2 rounded-xl border bg-white px-3 py-3 transition dark:bg-gray-900"
+          [class.border-brand-500]="navColor() === 'integrate'"
+          [class.text-brand-500]="navColor() === 'integrate'"
+          [class.border-gray-200]="navColor() !== 'integrate'"
+          [class.text-gray-500]="navColor() !== 'integrate'"
+          [class.dark:border-white\/[0.06]]="navColor() !== 'integrate'"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="7" height="18" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+            <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="text-sm font-medium">Integrate</span>
+        </button>
+        <button
+          type="button"
+          (click)="setNavColor('apparent')"
+          class="flex items-center gap-2 rounded-xl border bg-white px-3 py-3 transition dark:bg-gray-900"
+          [class.border-brand-500]="navColor() === 'apparent'"
+          [class.text-brand-500]="navColor() === 'apparent'"
+          [class.border-gray-200]="navColor() !== 'apparent'"
+          [class.text-gray-500]="navColor() !== 'apparent'"
+          [class.dark:border-white\/[0.06]]="navColor() !== 'apparent'"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="7" height="18" rx="1.5" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.6"/>
+            <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="text-sm font-medium">Apparent</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="mt-4 rounded-2xl border border-gray-200 p-4 dark:border-white/[0.06]">
+      <div class="mb-3 flex items-center gap-1.5">
+        <span class="rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-semibold text-white dark:bg-white/[0.08]">Presets</span>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        @for (item of presets; track item.id) {
+          <button
+            type="button"
+            (click)="setPreset(item.id)"
+            class="flex aspect-square items-center justify-center rounded-xl border transition"
+            [class.border-current]="presetActual() === item.id"
+            [class.shadow-card]="presetActual() === item.id"
+            [class.border-gray-200]="presetActual() !== item.id"
+            [class.dark:border-white\/[0.06]]="presetActual() !== item.id"
+            [style.color]="item.color"
+            [style.background]="presetActual() === item.id ? item.color + '14' : ''"
+            [attr.aria-label]="item.nombre"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="7" height="18" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </button>
+        }
+      </div>
+    </section>
+  </div>
+</aside>
