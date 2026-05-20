@@ -41,20 +41,7 @@
       (valueChange)="modalidadChange.emit($event)"
     />
 
-    <div class="lg:col-span-1">
-      <app-button
-        variant="outline"
-        size="sm"
-        className="w-full h-11"
-        [disabled]="!programaCompleto()"
-        (btnClick)="verDetalle.emit()"
-      >
-        <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0001 4.16669C5.93673 4.16669 2.55339 7.04169 1.69173 10C2.55339 12.9584 5.93673 15.8334 10.0001 15.8334C14.0634 15.8334 17.4467 12.9584 18.3084 10C17.4467 7.04169 14.0634 4.16669 10.0001 4.16669ZM10.0001 13.3334C8.16006 13.3334 6.66673 11.84 6.66673 10C6.66673 8.16002 8.16006 6.66669 10.0001 6.66669C11.8401 6.66669 13.3334 8.16002 13.3334 10C13.3334 11.84 11.8401 13.3334 10.0001 13.3334ZM10.0001 8.33335C9.08006 8.33335 8.33339 9.08002 8.33339 10C8.33339 10.92 9.08006 11.6667 10.0001 11.6667C10.9201 11.6667 11.6667 10.92 11.6667 10C11.6667 9.08002 10.9201 8.33335 10.0001 8.33335Z" fill=""/>
-        </svg>
-        Ver detalle
-      </app-button>
-    </div>
+   
   </div>
 
   @if (!programaCompleto()) {

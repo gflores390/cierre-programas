@@ -46,7 +46,7 @@ export class MatriculaTableComponent {
 
   readonly columns: ColumnDef<Matricula>[] = [
 
-    
+
     { key: 'indice',      header: 'Nº',              width: '56px' },
     { key: 'estudiante',  header: 'Apellidos y Nombres' },
     { key: 'ci',          header: 'Cedula Identidad',               width: '150px', value: (m) => m.ci }, 
@@ -60,7 +60,7 @@ export class MatriculaTableComponent {
   ];
 
   verDocumento(matricula: Matricula, tipo: 'foto' | 'boleta'): void {
-    this.modalService.open(DocumentoVisorModalComponent, { matricula, tipo }, { size: 'sm' });
+    this.modalService.open(DocumentoVisorModalComponent, { matricula, tipo }, { size: 'lg' });
   }
 
   onPageChange(pageIndex: number): void {
