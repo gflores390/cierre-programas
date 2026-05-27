@@ -1,0 +1,130 @@
+<!-- Encabezado -->
+<div class="mb-5 flex items-start gap-4">
+  <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-500/10">
+    <svg class="text-brand-500" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div>
+    <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Descargar listado</h4>
+    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+      {{ total() }} matriculados · Gestión {{ gestion() }}
+    </p>
+  </div>
+</div>
+
+<!-- Programa -->
+<div class="mb-5 flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 dark:border-white/[0.06] dark:bg-white/[0.03]">
+  <svg class="shrink-0 text-gray-400 dark:text-gray-500" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 14L12 3M12 3L8 7M12 3L16 7M3 15V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <p class="min-w-0 flex-1 truncate text-sm font-medium text-gray-700 dark:text-gray-300">{{ programa() }}</p>
+</div>
+
+<!-- Formato -->
+<div class="mb-5">
+  <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Formato de descarga</p>
+  <div class="grid grid-cols-2 gap-3">
+
+    <!-- PDF -->
+    <button
+      type="button"
+      (click)="seleccionarFormato('pdf')"
+      class="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all"
+      [class]="formato() === 'pdf'
+        ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10'
+        : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'"
+    >
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+        [class]="formato() === 'pdf' ? 'text-brand-500' : 'text-error-500'">
+        <rect width="32" height="32" rx="8" fill="currentColor" fill-opacity="0.1"/>
+        <path d="M10 8H19L24 13V24C24 24.5523 23.5523 25 23 25H10C9.44772 25 9 24.5523 9 24V9C9 8.44772 9.44772 8 10 8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 8V13H24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 18H14C14.5523 18 15 17.5523 15 17V16C15 15.4477 14.5523 15 14 15H12V20" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 15V20M17 15H19C19.5523 15 20 15.4477 20 16V19C20 19.5523 19.5523 20 19 20H17" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <p class="text-sm font-semibold" [class]="formato() === 'pdf' ? 'text-brand-600 dark:text-brand-400' : 'text-gray-700 dark:text-gray-300'">PDF</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">Listo para imprimir</p>
+      </div>
+      @if (formato() === 'pdf') {
+        <span class="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      }
+    </button>
+
+    <!-- Excel -->
+    <button
+      type="button"
+      (click)="seleccionarFormato('excel')"
+      class="flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all"
+      [class]="formato() === 'excel'
+        ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10'
+        : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'"
+    >
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+        [class]="formato() === 'excel' ? 'text-brand-500' : 'text-success-500'">
+        <rect width="32" height="32" rx="8" fill="currentColor" fill-opacity="0.1"/>
+        <path d="M10 8H19L24 13V24C24 24.5523 23.5523 25 23 25H10C9.44772 25 9 24.5523 9 24V9C9 8.44772 9.44772 8 10 8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 8V13H24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 15L16.5 20M16.5 15L12 20" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+        <path d="M18 15H21M18 17.5H21M18 20H21" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p class="text-sm font-semibold" [class]="formato() === 'excel' ? 'text-brand-600 dark:text-brand-400' : 'text-gray-700 dark:text-gray-300'">Excel</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">Para editar y filtrar</p>
+      </div>
+      @if (formato() === 'excel') {
+        <span class="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      }
+    </button>
+
+  </div>
+</div>
+
+<!-- Columnas a incluir -->
+<div class="mb-6">
+  <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Incluir en el listado</p>
+  <div class="flex flex-col gap-2.5">
+
+    <label class="flex cursor-pointer items-center gap-3">
+      <input type="checkbox" [checked]="incluirCI()" (change)="incluirCI.set(!incluirCI())"
+        class="h-4 w-4 rounded border-gray-300 text-brand-500 accent-brand-500" />
+      <span class="text-sm text-gray-700 dark:text-gray-300">Cédula de identidad</span>
+    </label>
+
+    <label class="flex cursor-pointer items-center gap-3">
+      <input type="checkbox" [checked]="incluirContacto()" (change)="incluirContacto.set(!incluirContacto())"
+        class="h-4 w-4 rounded border-gray-300 text-brand-500 accent-brand-500" />
+      <span class="text-sm text-gray-700 dark:text-gray-300">Datos de contacto (celular, correo)</span>
+    </label>
+
+    <label class="flex cursor-pointer items-center gap-3">
+      <input type="checkbox" [checked]="incluirEstado()" (change)="incluirEstado.set(!incluirEstado())"
+        class="h-4 w-4 rounded border-gray-300 text-brand-500 accent-brand-500" />
+      <span class="text-sm text-gray-700 dark:text-gray-300">Estado de matrícula</span>
+    </label>
+
+  </div>
+</div>
+
+<!-- Botones -->
+<div class="flex items-center justify-end gap-3">
+  <app-button variant="outline" size="sm" (btnClick)="onCerrar()">Cancelar</app-button>
+  <app-button variant="primary" size="sm" (btnClick)="onDescargar()">
+    @if (descargando()) {
+      <svg class="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Generando...
+    } @else {
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Descargar {{ formato() === 'pdf' ? 'PDF' : 'Excel' }}
+    }
+  </app-button>
+</div>

@@ -5,6 +5,7 @@ import { PageBreadcrumbComponent } from '../../../../shared/components/common/pa
 import { MatriculaService } from '../../data';
 import { EstadoMatricula, Matricula, Programa } from '../../models';
 import {
+  DescargaListadoModalComponent,
   MatriculaTableComponent,
   MatriculaToolbarComponent,
   MatricularModalComponent,
@@ -53,7 +54,7 @@ export class MatriculacionPageComponent {
         gestion: this.filtro().gestion,
         programa: this.seleccionPrograma().programa,
       },
-      { size: 'lg' }
+      { size: '2xl' }
     );
   }
 
@@ -89,5 +90,17 @@ export class MatriculacionPageComponent {
   }
   onVerDetallePrograma(): void {
     console.log('Ver detalle del programa', this.seleccionPrograma());
+  }
+
+  onDescargarListado(): void {
+    this.modalService.open(
+      DescargaListadoModalComponent,
+      {
+        programa: this.seleccionPrograma().programa,
+        gestion:  this.filtro().gestion,
+        total:    this.matriculaService.matriculasFiltradas().length,
+      },
+      { size: 'sm' }
+    );
   }
 }

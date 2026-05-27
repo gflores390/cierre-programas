@@ -24,10 +24,16 @@ export class DocumentoVisorModalComponent {
   readonly observacion = signal('');
   readonly enviosCount = signal(0);
 
+  readonly tieneDocumento = computed(() =>
+    this.tipoActivo() === 'foto' ? this.matricula().tieneFoto : this.matricula().tieneBoleta,
+  );
+
   readonly mensajePredeterminado = computed(() => {
     const tipoLabel = this.tipoActivo() === 'foto' ? 'foto de identificación' : 'boleta de pago';
     const nombre = `${this.matricula().estudiante.nombres} ${this.matricula().estudiante.apellidos}`;
-    return `Estimado/a ${nombre}, le informamos que su ${tipoLabel} no cumple los requisitos. Por favor vuelva a subir el documento correcto. Gracias.`;
+    return this.tieneDocumento()
+      ? `Estimado/a ${nombre}, le informamos que su ${tipoLabel} no cumple los requisitos. Por favor vuelva a subir el documento correcto. Gracias.`
+      : `Estimado/a ${nombre}, aún no ha subido su ${tipoLabel}. Por favor súbala lo antes posible para continuar con el proceso de matrícula. Gracias.`;
   });
 
   seleccionarTab(tab: 'foto' | 'boleta'): void {

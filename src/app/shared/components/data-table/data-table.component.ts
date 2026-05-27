@@ -8,7 +8,6 @@ import {
   input,
   output,
 } from '@angular/core';
-import { ButtonComponent } from '../ui/button/button.component';
 import { ColumnTemplateContext, ColumnTemplateDirective } from './column.directive';
 import { ColumnDef, SortDir, SortState } from './data-table.types';
 
@@ -16,7 +15,7 @@ import { ColumnDef, SortDir, SortState } from './data-table.types';
   selector: 'app-data-table',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule],
   templateUrl: './data-table.component.html',
 })
 export class DataTableComponent<T> {

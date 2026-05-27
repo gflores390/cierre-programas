@@ -1,7 +1,7 @@
 import { Injectable, Type, signal } from '@angular/core';
 
 export interface ModalConfig {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
 }
 
 interface ActiveModal {

@@ -4,10 +4,12 @@ import { ModalComponent } from '../../../shared/components/ui/modal/modal.compon
 import { ModalService } from '../../services/modal.service';
 
 const SIZE_CLASS: Record<string, string> = {
-  sm: 'max-w-[420px] p-5 lg:p-6',
-  md: 'max-w-[540px] p-6 lg:p-8',
-  lg: 'max-w-[720px] p-6 lg:p-8',
-  xl: 'max-w-[960px] p-6 lg:p-8',
+  sm:   'max-w-[420px] p-5 lg:p-6',
+  md:   'max-w-[540px] p-6 lg:p-8',
+  lg:   'max-w-[720px] p-6 lg:p-8',
+  xl:   'max-w-[960px] p-6 lg:p-8',
+  '2xl': 'max-w-[1200px] p-6 lg:p-8',
+  full: 'max-w-[calc(100vw-48px)] max-h-[calc(100vh-48px)] p-6 lg:p-8',
 };
 
 @Component({

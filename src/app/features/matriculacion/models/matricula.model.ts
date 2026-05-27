@@ -4,9 +4,26 @@ export type EstadoMatricula =
   | 'retirado'
   | 'egresado';
 
+export type EstadoDeposito = 'comprobado' | 'pendiente' | 'rechazado';
+
+export interface Deposito {
+  id: number;
+  fecha: string;
+  nroDeposito: string;
+  monto: number;
+  tipoPago: string;
+  metodoPago: string;
+  estado: EstadoDeposito;
+}
+
 export interface Estudiante {
   nombres: string;
   apellidos: string;
+  apellidoPaterno?: string;
+  apellidoMaterno?: string;
+  fechaNacimiento?: string;
+  genero?: 'masculino' | 'femenino';
+  nacionalidad?: string;
   avatar?: string;
 }
 
@@ -17,6 +34,7 @@ export interface Tutor {
 
 export interface Contacto {
   telefono: string;
+  celularReferencia?: string;
   email?: string;
 }
 
@@ -34,6 +52,9 @@ export interface Matricula {
   tutor: Tutor;
   contacto: Contacto;
   estado: EstadoMatricula;
+  estadoCivil?: string;
+  domicilio?: string;
+  depositos?: Deposito[];
 }
 
 export interface MatriculaFiltro {

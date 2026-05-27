@@ -1,7 +1,7 @@
 <!-- Encabezado -->
-<div class="mb-6 flex items-start gap-4">
-  <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-500/10">
-    <svg class="text-brand-500" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<div class="mb-5 flex items-start gap-4">
+  <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-500/10">
+    <svg class="text-brand-500" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M9 11L12 14L22 4M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
@@ -13,65 +13,200 @@
   </div>
 </div>
 
-<!-- Datos del estudiante -->
-<div class="rounded-2xl border border-gray-100 bg-gray-50 p-4 dark:border-white/[0.06] dark:bg-white/[0.03]">
-  <div class="flex items-center gap-3">
-    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-      @if (matricula().estudiante.avatar) {
-        <img width="48" height="48" [src]="matricula().estudiante.avatar" [alt]="matricula().estudiante.nombres" />
-      }
-    </div>
-    <div class="min-w-0">
-      <p class="font-semibold text-gray-800 dark:text-white/90">
-        {{ matricula().estudiante.apellidos }} {{ matricula().estudiante.nombres }}
-      </p>
-      <p class="text-sm text-gray-500 dark:text-gray-400">{{ matricula().codigo }}</p>
-    </div>
+<!-- Banner del estudiante -->
+<div class="mb-6 flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 dark:border-white/[0.06] dark:bg-white/[0.03]">
+  <div class="h-11 w-11 shrink-0 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+    @if (matricula().estudiante.avatar) {
+      <img width="44" height="44" [src]="matricula().estudiante.avatar" [alt]="matricula().estudiante.nombres" class="h-full w-full object-cover" />
+    }
   </div>
+  <div class="min-w-0 flex-1">
+    <p class="font-semibold text-gray-800 dark:text-white/90">
+      {{ matricula().estudiante.apellidos }}, {{ matricula().estudiante.nombres }}
+    </p>
+    <p class="text-xs text-gray-400 dark:text-gray-500">{{ matricula().codigo }} · {{ matricula().rude }}</p>
+  </div>
+  <app-badge size="sm"
+    [color]="matricula().estado === 'activo' ? 'success'
+           : matricula().estado === 'suspendido' ? 'warning'
+           : matricula().estado === 'retirado' ? 'error' : 'info'">
+    {{ matricula().estado | titlecase }}
+  </app-badge>
+</div>
 
-  <div class="mt-4 grid grid-cols-2 gap-3">
-    <div>
-      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">CI</p>
-      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().ci }}</p>
-    </div>
-    <div>
-      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">RUDE</p>
-      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().rude }}</p>
-    </div>
-    <div>
-      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Curso</p>
-      <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().curso }}</p>
-    </div>
-    <div>
-      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Estado</p>
-      <div class="mt-0.5">
-        <app-badge size="sm"
-          [color]="matricula().estado === 'activo' ? 'success'
-                 : matricula().estado === 'suspendido' ? 'warning'
-                 : matricula().estado === 'retirado' ? 'error' : 'info'">
-          {{ matricula().estado | titlecase }}
-        </app-badge>
+<!-- ── Cuerpo en dos columnas ─────────────────────────────────── -->
+<div class="mb-6 grid grid-cols-5 gap-6">
+
+  <!-- COLUMNA IZQUIERDA — datos personales + actualizables -->
+  <div class="col-span-2 flex flex-col gap-5">
+
+    <!-- Datos personales (solo lectura) -->
+    <div class="overflow-hidden rounded-2xl border border-gray-100 dark:border-white/[0.06]">
+      <div class="border-b border-gray-100 bg-gray-50 px-4 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.02]">
+        <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Datos personales</p>
+      </div>
+      <div class="grid grid-cols-2 gap-x-4 gap-y-3 p-4">
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Ap. Paterno</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().estudiante.apellidoPaterno || '—' }}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Ap. Materno</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().estudiante.apellidoMaterno || '—' }}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Nombre(s)</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().estudiante.nombres }}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Cédula de Identidad</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ ciNumero() }}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Expedido</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ expedido() || '—' }}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Fecha Nacimiento</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().estudiante.fechaNacimiento || '—' }}</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Género</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ (matricula().estudiante.genero | titlecase) || '—' }}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">Nacionalidad</p>
+          <p class="mt-0.5 text-sm font-medium text-gray-700 dark:text-gray-300">{{ matricula().estudiante.nacionalidad || '—' }}</p>
+        </div>
       </div>
     </div>
+
+    <!-- Datos actualizables -->
+    <div class="overflow-hidden rounded-2xl border border-gray-100 dark:border-white/[0.06]">
+      <div class="border-b border-gray-100 bg-gray-50 px-4 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.02]">
+        <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          Datos actualizables
+          <span class="ml-1 font-normal normal-case tracking-normal">(editables)</span>
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-3 p-4">
+        <div class="col-span-2">
+          <app-select
+            label="Estado civil"
+            size="sm"
+            [options]="estadoCivilOpciones"
+            [value]="estadoCivil()"
+            (valueChange)="estadoCivil.set($event)"
+          />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-xs font-medium text-gray-600 dark:text-gray-400">Celular</label>
+          <input type="tel" [ngModel]="celular()" (ngModelChange)="celular.set($event)" placeholder="Ej. 70123456"
+            class="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-600 dark:focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-xs font-medium text-gray-600 dark:text-gray-400">Cel. referencia</label>
+          <input type="tel" [ngModel]="celularRef()" (ngModelChange)="celularRef.set($event)" placeholder="Número alternativo"
+            class="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-600 dark:focus:border-brand-500" />
+        </div>
+        <div class="col-span-2">
+          <label class="mb-1.5 block text-xs font-medium text-gray-600 dark:text-gray-400">Correo electrónico</label>
+          <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="correo@ejemplo.com"
+            class="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-600 dark:focus:border-brand-500" />
+        </div>
+        <div class="col-span-2">
+          <label class="mb-1.5 block text-xs font-medium text-gray-600 dark:text-gray-400">Domicilio actual</label>
+          <input type="text" [ngModel]="domicilio()" (ngModelChange)="domicilio.set($event)" placeholder="Calle, zona, ciudad"
+            class="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-600 dark:focus:border-brand-500" />
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- COLUMNA DERECHA — listado de depósitos -->
+  <div class="col-span-3 flex flex-col">
+
+    <!-- Lista de depósitos -->
+    <div class="overflow-hidden rounded-2xl border border-gray-100 dark:border-white/[0.06]">
+      <!-- Header del card -->
+      <div class="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.02]">
+        <div class="flex items-center gap-2">
+          <span class="flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-white"
+            [class]="depositos().length ? 'bg-brand-500' : 'bg-gray-300 dark:bg-gray-600'">
+            {{ depositos().length }}
+          </span>
+          <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+            Listado de depósitos
+          </p>
+        </div>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-brand-600 active:bg-brand-700"
+        >
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          Agregar depósito
+        </button>
+      </div>
+      @for (dep of depositos(); track dep.id; let i = $index) {
+        <div class="flex items-center gap-3 px-4 py-3"
+          [class]="i > 0 ? 'border-t border-gray-100 dark:border-white/[0.06]' : ''">
+          <!-- Número -->
+          <span class="w-5 shrink-0 text-center text-xs text-gray-400 dark:text-gray-500">{{ i + 1 }}</span>
+          <!-- Nº depósito + fecha + tipo -->
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ dep.nroDeposito }}</p>
+            <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500 truncate">
+              {{ dep.fecha }} · {{ dep.tipoPago }}
+            </p>
+          </div>
+          <!-- Monto + método -->
+          <div class="shrink-0 text-right">
+            <p class="text-sm font-bold text-gray-800 dark:text-white/90">
+              {{ dep.monto.toLocaleString('es-BO') }} Bs.
+            </p>
+            <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ dep.metodoPago }}</p>
+          </div>
+          <!-- Estado -->
+          <div class="shrink-0">
+            <app-badge size="sm" [color]="colorDeposito(dep.estado)">
+              {{ dep.estado | titlecase }}
+            </app-badge>
+          </div>
+        </div>
+      } @empty {
+        <div class="flex flex-col items-center justify-center gap-2 py-10">
+          <svg class="text-gray-300 dark:text-gray-600" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 5.55228 9.44772 6 10 6H14C14.5523 6 15 5.55228 15 5M9 5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p class="text-sm text-gray-400 dark:text-gray-500">Sin depósitos registrados</p>
+        </div>
+      }
+    </div>
+
+  </div>
+
 </div>
 
 <!-- Aviso -->
-<div class="mt-4 flex items-start gap-2 rounded-xl bg-warning-50 px-4 py-3 dark:bg-warning-500/10">
+<div class="mb-6 flex items-start gap-2 rounded-xl bg-warning-50 px-4 py-3 dark:bg-warning-500/10">
   <svg class="mt-0.5 shrink-0 text-warning-500" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10 6.25V10.4167M10 13.75H10.0083M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
   <p class="text-xs text-warning-700 dark:text-warning-400">
     Esta acción registrará la matrícula en el programa
-    <strong>{{ programa() }}</strong> para la gestión <strong>{{ gestion() }}</strong>.
+    <strong>{{ programa() }}</strong> para la gestión <strong>{{ gestion() }}</strong>
+    y actualizará los datos de contacto del estudiante.
   </p>
 </div>
 
 <!-- Botones -->
-<div class="mt-6 flex items-center justify-end gap-3">
+<div class="flex items-center justify-end gap-3">
   <app-button variant="outline" size="sm" (btnClick)="onCerrar()">Cancelar</app-button>
   <app-button variant="primary" size="sm" (btnClick)="onConfirmar()">
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     Confirmar Matrícula {{ gestion() }}

@@ -84,30 +84,44 @@
       } @else {
         <ul class="divide-y divide-gray-100 dark:divide-gray-700/60">
           @for (programa of programasVisibles(); track programa.id) {
-            <li>
+            <li class="group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03]">
+              <!-- Info del programa — clickeable para seleccionar -->
+              <div class="min-w-0 flex-1 cursor-pointer" (click)="seleccionarPrograma(programa)">
+                <p class="truncate text-sm font-medium text-gray-800 dark:text-white/90">
+                  {{ programa.nombre }} — Turno {{ programa.turno }}
+                </p>
+                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                  {{ programa.modalidad | titlecase }} · Gestión {{ programa.gestion }}
+                </p>
+              </div>
+              <!-- Cupos -->
+              <div class="shrink-0 text-right">
+                @let disponibles = programa.cupos - programa.inscritos;
+                <p class="text-xs font-semibold"
+                  [class]="disponibles > 5 ? 'text-success-600 dark:text-success-400' : disponibles > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-error-500'">
+                  {{ disponibles > 0 ? disponibles + ' cupos' : 'Sin cupos' }}
+                </p>
+                <p class="text-[11px] text-gray-400 dark:text-gray-500">de {{ programa.cupos }}</p>
+              </div>
+              <!-- Descargar -->
               <button
                 type="button"
-                class="group w-full px-4 py-3.5 flex items-center gap-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03]"
+                class="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
+                title="Descargar listado"
+                (click)="descargarListado.emit()"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Descargar
+              </button>
+              <!-- Seleccionar -->
+              <button
+                type="button"
+                class="shrink-0 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-brand-400 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-300 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
                 (click)="seleccionarPrograma(programa)"
               >
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-medium text-gray-800 dark:text-white/90 truncate">
-                    {{ programa.nombre }} — Turno {{ programa.turno }}
-                  </p>
-                  <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                    {{ programa.modalidad | titlecase }} · Gestión {{ programa.gestion }}
-                  </p>
-                </div>
-                <div class="shrink-0 text-right">
-                  @let disponibles = programa.cupos - programa.inscritos;
-                  <p class="text-xs font-semibold" [class]="disponibles > 5 ? 'text-success-600 dark:text-success-400' : disponibles > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-error-500'">
-                    {{ disponibles > 0 ? disponibles + ' cupos' : 'Sin cupos' }}
-                  </p>
-                  <p class="text-[11px] text-gray-400 dark:text-gray-500">de {{ programa.cupos }}</p>
-                </div>
-                <span class="shrink-0 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:border-brand-400 group-hover:bg-brand-50 group-hover:text-brand-600 dark:group-hover:border-brand-500 dark:group-hover:bg-brand-500/10 dark:group-hover:text-brand-400">
-                  Seleccionar
-                </span>
+                Seleccionar
               </button>
             </li>
           }
@@ -129,13 +143,30 @@
           {{ programaCompleto() }}
         </p>
       </div>
-      <button
-        type="button"
-        class="shrink-0 text-xs font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
-        (click)="cambiarPrograma()"
-      >
-        Cambiar
-      </button>
+      <div class="flex shrink-0 items-center gap-3">
+         <button
+                type="button"
+                class="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
+                title="Descargar listado"
+                (click)="descargarListado.emit()"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Descargar
+              </button>
+              
+        <button
+          type="button"
+          class="shrink-0 text-xs font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+          (click)="cambiarPrograma()"
+        >
+          Cambiar
+        </button>
+
+
+        
+      </div>
     </div>
   }
 </div>

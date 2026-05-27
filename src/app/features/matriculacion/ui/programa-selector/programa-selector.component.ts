@@ -1,7 +1,6 @@
 import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
 import { SelectComponent, SelectOption } from '../../../../shared/components/form/select/select.component';
 import { Programa, SeleccionPrograma } from '../../models';
 
@@ -9,7 +8,7 @@ import { Programa, SeleccionPrograma } from '../../models';
   selector: 'app-programa-selector',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ButtonComponent, SelectComponent, TitleCasePipe, FormsModule],
+  imports: [SelectComponent, TitleCasePipe, FormsModule],
   templateUrl: './programa-selector.component.html',
 })
 export class ProgramaSelectorComponent {
@@ -22,6 +21,7 @@ export class ProgramaSelectorComponent {
   readonly modalidadChange = output<string>();
   readonly programaChange = output<Programa | null>();
   readonly verDetalle = output<void>();
+  readonly descargarListado = output<void>();
 
   readonly versiones: SelectOption[] = [
     { value: 'todas', label: 'Todas' },

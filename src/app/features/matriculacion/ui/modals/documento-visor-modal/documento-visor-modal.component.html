@@ -19,15 +19,31 @@
 </div>
 
 <!-- Vista del documento -->
-<div class="rounded-2xl border border-gray-100 bg-gray-50 dark:border-white/[0.06] dark:bg-white/[0.03] overflow-hidden">
-  @if (tipoActivo() === 'foto') {
+<div class="rounded-2xl border overflow-hidden"
+  [class]="tieneDocumento()
+    ? 'border-gray-100 bg-gray-50 dark:border-white/[0.06] dark:bg-white/[0.03]'
+    : 'border-warning-200 bg-warning-50 dark:border-warning-500/20 dark:bg-warning-500/5'">
+
+  @if (!tieneDocumento()) {
+    <!-- Estado pendiente -->
+    <div class="flex flex-col items-center justify-center py-10 gap-3">
+      <div class="flex h-24 w-24 items-center justify-center rounded-full bg-warning-100 dark:bg-warning-500/20">
+        <svg class="text-warning-500" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="text-sm font-semibold text-warning-700 dark:text-warning-400">
+        {{ tipoActivo() === 'foto' ? 'Foto no subida' : 'Boleta no registrada' }}
+      </p>
+      <p class="text-xs text-warning-600/80 dark:text-warning-500/80">
+        El estudiante aún no ha enviado este documento
+      </p>
+    </div>
+  } @else if (tipoActivo() === 'foto') {
     <div class="flex flex-col items-center justify-center py-10 gap-3">
       @if (matricula().estudiante.avatar) {
-        <img
-          [src]="matricula().estudiante.avatar"
-          [alt]="matricula().estudiante.nombres"
-          class="h-36 w-36 rounded-2xl object-cover shadow-md"
-        />
+        <img [src]="matricula().estudiante.avatar" [alt]="matricula().estudiante.nombres"
+          class="h-36 w-36 rounded-2xl object-cover shadow-md" />
       } @else {
         <div class="flex h-36 w-36 items-center justify-center rounded-2xl bg-gray-200 dark:bg-gray-700">
           <svg class="text-gray-400" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
