@@ -1,0 +1,30 @@
+<!-- Header pegado al borde del modal (compensamos el padding del contenedor) -->
+<div class="-mx-6 -mt-6 lg:-mx-8 lg:-mt-8 mb-5 flex items-center justify-between border-b border-gray-100 bg-gray-50 px-6 py-3 dark:border-white/[0.06] dark:bg-white/[0.02]">
+  <div class="flex items-center gap-3">
+    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-500/10">
+      <svg class="text-brand-500" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">{{ titulo() }}</h4>
+      @if (subtitulo()) {
+        <p class="text-xs text-gray-400 dark:text-gray-500">{{ subtitulo() }}</p>
+      }
+    </div>
+  </div>
+  <app-button variant="outline" size="sm" (btnClick)="onCerrar()">Cerrar</app-button>
+</div>
+
+<!-- PDF Viewer -->
+<ngx-extended-pdf-viewer
+  [src]="src()"
+  height="calc(100vh - 180px)"
+  [zoom]="'page-width'"
+  [showPresentationModeButton]="false"
+  [showOpenFileButton]="false"
+  [showPropertiesButton]="false"
+  backgroundColor="#f3f4f6"
+>
+</ngx-extended-pdf-viewer>
