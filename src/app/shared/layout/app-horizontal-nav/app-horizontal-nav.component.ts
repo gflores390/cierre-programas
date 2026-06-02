@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { MAIN_NAV_ITEMS, OTHERS_NAV_ITEMS, NavItem } from '../../config/nav-items';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-horizontal-nav',
@@ -12,6 +13,10 @@ import { MAIN_NAV_ITEMS, OTHERS_NAV_ITEMS, NavItem } from '../../config/nav-item
 })
 export class AppHorizontalNavComponent {
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly settings = inject(SettingsService);
+
+  /** Color del nav: 'apparent' = barra oscura; 'integrate' = sigue el tema. */
+  readonly navColor = this.settings.navColor;
 
   readonly items: NavItem[] = [...MAIN_NAV_ITEMS, ...OTHERS_NAV_ITEMS];
 

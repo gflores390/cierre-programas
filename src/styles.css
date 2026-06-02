@@ -99,6 +99,10 @@ layer(base);
   --color-gray-950: #060b11;
   --color-gray-dark: #1c252e;
 
+  /* Superficies del nav "apparent" (sidebar / barra horizontal / header) */
+  --color-nav-dark: #1d232a;
+  --color-nav-darker: #13161b;
+
   /* Orange aligned to Minimal warning */
   --color-orange-25: #fffcf5;
   --color-orange-50: #fff9de;

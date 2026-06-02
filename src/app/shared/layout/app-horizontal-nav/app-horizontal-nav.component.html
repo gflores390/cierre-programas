@@ -1,5 +1,10 @@
 <nav
-  class="sticky top-0 z-40 hidden w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 xl:block"
+  class="sticky top-0 z-40 hidden w-full border-b xl:block"
+  [ngClass]="
+    navColor() === 'apparent'
+      ? 'dark bg-nav-dark border-black/30'
+      : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800'
+  "
 >
   <div class="mx-auto flex max-w-(--breakpoint-2xl) items-center gap-1 px-6 py-2">
     @for (item of items; track item.name; let i = $index) {

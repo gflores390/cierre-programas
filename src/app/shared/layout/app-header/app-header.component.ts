@@ -1,4 +1,12 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { SidebarService } from '../../services/sidebar.service';
 import { SettingsService } from '../../services/settings.service';
 import { CommonModule } from '@angular/common';
@@ -23,7 +31,22 @@ export class AppHeaderComponent {
   readonly isMobileOpen$;
   private readonly settings = inject(SettingsService);
 
+  /** true cuando la página se ha desplazado: activa el efecto vidrio esmerilado. */
+  readonly scrolled = signal(false);
+
+  /** Header oscuro: solo en layout horizontal con nav 'apparent' (todo el bloque superior negro). */
+  readonly navOscuro = computed(
+    () =>
+      this.settings.navColor() === 'apparent' &&
+      this.settings.navLayout() === 'horizontal',
+  );
+
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.scrolled.set(window.scrollY > 8);
+  }
 
   constructor(public sidebarService: SidebarService) {
     this.isMobileOpen$ = this.sidebarService.isMobileOpen$;

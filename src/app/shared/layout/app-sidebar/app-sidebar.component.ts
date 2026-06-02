@@ -96,6 +96,17 @@ export class AppSidebarComponent {
 
   private readonly settings = inject(SettingsService);
 
+  /** Color del nav: 'apparent' = sidebar oscuro; 'integrate' = sigue el tema. */
+  readonly navColor = this.settings.navColor;
+
+  /** Perfil del footer del sidebar. TODO: poblar desde un AuthService. */
+  readonly usuario = {
+    nombre: 'Sergio Luis Yujra Torrez',
+    email: 'sergioyujra@gmail.com',
+    avatarUrl: '/images/user/owner.jpg',
+    plan: 'Free',
+  };
+
   onSidebarMouseEnter() {
     if (this.settings.navLayout() === 'mini') return;
     this.isExpanded$.subscribe(expanded => {
