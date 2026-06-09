@@ -1,388 +1,605 @@
 ---
-name: estructura-proyecto-tailadmin
-description: Usa esta skill SIEMPRE que se trabaje en este proyecto Angular 21 basado en la plantilla TailAdmin. Define cómo convive la plantilla (shared/, layouts/, pages/) con la arquitectura enterprise por features (features/, core/), cómo migrar páginas demo a features reales, dónde poner login/auth, reglas de dependencias, naming, path aliases, y el flujo paso a paso para añadir una feature nueva. Disparadores: "crear login", "nueva feature", "dónde pongo X", "limpiar la plantilla", "estructura del proyecto", "auth", "guard", "interceptor", "refactorizar página demo", "AppLayout", "AuthPageLayout", "TailAdmin".
+name: estructura-proyecto-sistema-integrado
+description: Guia operativa del proyecto Angular 21. Define la arquitectura vigente, responsabilidades por carpeta, reglas de dependencias, creacion de features, componentes, servicios, modelos, rutas y uso del design system.
 ---
 
-# Estructura del Proyecto — TailAdmin + Arquitectura Enterprise
+# Arquitectura y convenciones del proyecto
 
-Guía operativa para este proyecto Angular 21 que parte de la plantilla **TailAdmin Angular (free)** y se transforma progresivamente en una app enterprise con arquitectura por features.
+> Estado revisado contra el codigo del repositorio: **9 de junio de 2026**.
+>
+> Este documento es la fuente de verdad para crear o ubicar archivos nuevos. Los
+> archivos heredados de TailAdmin pueden no cumplir todas las reglas; no deben
+> copiarse como referencia sin revisar esta guia.
 
-> **Stack real del proyecto**: Angular 21.2.x, TypeScript 5.9, Tailwind CSS v4, standalone components (default en Angular 21), `strictTemplates: true`, RxJS 7.8, signals.
+## 1. Stack real
 
----
+- Angular 21.2 con componentes standalone.
+- TypeScript 5.9 en modo `strict`.
+- Tailwind CSS v4 con tokens en `src/styles.css`.
+- Signals para estado local y de feature.
+- RxJS para HTTP, eventos asincronos y flujos que realmente lo requieran.
+- Rutas lazy mediante `loadChildren` y `loadComponent`.
+- `ChangeDetectionStrategy.OnPush` en componentes nuevos.
 
-## 1. Filosofía: la plantilla NO se borra
+### Comandos del proyecto
 
-TailAdmin trae cientos de horas de UI/UX. Tirarla a la basura para "empezar limpio" es una pérdida que casi ningún equipo serio asume. La forma profesional de trabajar con una plantilla admin es:
+Angular CLI esta instalado localmente. No se requiere `ng` global:
 
-1. **Tratarla como una librería interna de UI**, no como tu aplicación.
-2. **Conservar** `shared/components/ui/*`, `shared/components/form/*`, `shared/components/common/*`, `shared/layout/*` — son tu **design system gratis**.
-3. **Borrar progresivamente** páginas demo (`pages/*`) **solo cuando** las reemplazas por una feature real.
-4. **Construir en paralelo** la capa de negocio en `features/` + `core/` siguiendo arquitectura enterprise.
-5. **Reutilizar** los layouts (`AppLayoutComponent`, `AuthPageLayoutComponent`) y los componentes presentacionales (`SigninFormComponent`, `InputComponent`, etc.); cablearlos a tus stores y servicios reales.
-
-**Regla mental**: la plantilla aporta "cómo se ve". Tú aportas "qué hace y de dónde vienen los datos".
-
----
-
-## 2. Estado actual del proyecto (snapshot)
-
+```powershell
+npm install
+npm start
+npm run build
+npm test
 ```
+
+Para ejecutar Angular CLI directamente:
+
+```powershell
+npx ng version
+npx ng generate component features/alumnos/ui/alumno-card
+```
+
+Si aparece `ng: The term 'ng' is not recognized`, usar `npm start` o `npx ng`,
+no instalar una version global diferente a la declarada en `package.json`.
+
+## 2. Estructura vigente
+
+```text
 src/app/
-├── app.component.ts
-├── app.config.ts                        # providers globales (HOY: minimal)
-├── app.routes.ts                        # routing (HOY: todo eager, sin lazy)
-├── pages/                               # ⚠️ DEMOS de la plantilla — migrar a features/
-│   ├── auth-pages/
-│   │   ├── sign-in/                     # → moverá a features/auth/feature/login-page
-│   │   └── sign-up/                     # → moverá a features/auth/feature/register-page
-│   ├── dashboard/ecommerce/
-│   ├── profile/, calender/, charts/, forms/, invoices/
-│   ├── other-page/not-found/
-│   ├── tables/, ui-elements/, blank/
-└── shared/                              # ✅ MANTENER — es el design system
-    ├── components/
-    │   ├── auth/{signin-form, signup-form}/    # UI de auth (presentacional)
-    │   ├── ui/{alert, avatar, badge, button, dropdown, images, modal, table, videos}/
-    │   ├── form/{input, label, select, date-picker, time-picker, multi-select, ...}/
-    │   ├── common/{component-card, page-breadcrumb, theme-toggle, ...}/
-    │   ├── cards/, charts/, ecommerce/, header/, invoice/, tables/, transactions/,
-    │   ├── user-profile/, ui-example/
-    ├── layout/
-    │   ├── app-layout/                  # Shell con sidebar+header (rutas privadas)
-    │   ├── app-header/, app-sidebar/, backdrop/
-    │   ├── auth-page-layout/            # Shell para login/register
-    │   └── generator-layout/
-    ├── services/
-    │   ├── modal.service.ts             # ya hay un ModalService → reutilizar
-    │   ├── sidebar.service.ts
-    │   └── theme.service.ts
-    └── pipe/safe-html.pipe.ts
+|-- app.component.ts              # host raiz: router + modal outlet
+|-- app.config.ts                 # providers globales
+|-- app.routes.ts                 # rutas de primer nivel
+|-- core/                         # infraestructura singleton de toda la app
+|   |-- components/
+|   |   `-- modal-outlet/
+|   |-- services/
+|   |   `-- modal.service.ts
+|   `-- index.ts
+|-- features/                     # dominios funcionales de la aplicacion
+|   |-- dashboard/
+|   |   |-- data/
+|   |   |-- models/
+|   |   |-- feature/
+|   |   `-- dashboard.routes.ts
+|   `-- matriculacion/
+|       |-- data/
+|       |-- models/
+|       |-- feature/
+|       |-- ui/
+|       `-- matriculacion.routes.ts
+|-- shared/                       # design system e infraestructura visual
+|   |-- components/
+|   |-- config/
+|   |-- layout/
+|   |-- pipes/
+|   `-- services/
+|-- pages/                        # legado; actualmente solo contiene la pagina 404
+`-- example-pdf-viewer/           # ejemplo aislado; no es una feature productiva
 ```
 
-**Lo que falta** y vamos a añadir: `core/`, `features/`, path aliases, interceptores, guards, stores de dominio.
+### Responsabilidad de cada carpeta
 
----
+| Carpeta | Contenido permitido |
+|---|---|
+| `core/` | Servicios y componentes globales que se instancian una vez: autenticacion, interceptores, configuracion, modal global, logging. |
+| `features/` | Codigo de negocio agrupado por dominio: matriculacion, dashboard, usuarios, pagos, etc. |
+| `shared/` | UI reutilizable, layouts, pipes, utilidades visuales y tipos realmente genericos. No contiene reglas de un dominio. |
+| `pages/` | Codigo heredado pendiente de migracion. No crear funcionalidad nueva aqui. |
+| `public/` | Imagenes, iconos, fuentes y archivos estaticos servidos sin procesamiento. |
 
-## 3. Estructura objetivo (a la que migramos progresivamente)
+## 3. Estructura canonica de una feature
 
-```
-src/app/
-├── core/                                # 🆕 Singletons globales — se carga 1 vez
-│   ├── auth/
-│   │   ├── auth.service.ts              # login, logout, refresh, token storage
-│   │   ├── auth.store.ts                # signal store de sesión (user, isAuth)
-│   │   ├── auth.guard.ts                # CanActivate/CanMatch funcional
-│   │   ├── auth.interceptor.ts          # añade Bearer a NUESTRA API
-│   │   └── auth.types.ts                # Session, AuthUser, AuthTokens
-│   ├── http/
-│   │   ├── error.interceptor.ts         # mapea HttpErrorResponse → AppError
-│   │   ├── retry.interceptor.ts         # backoff exponencial para GETs
-│   │   └── error.mapper.ts
-│   ├── config/
-│   │   └── environment.tokens.ts        # InjectionToken<API_BASE_URL>, etc.
-│   ├── logging/
-│   │   └── logger.service.ts
-│   └── providers/
-│       └── core.providers.ts            # provideCore() exportable
-├── features/                            # 🆕 Una carpeta por dominio. Lazy loaded.
-│   └── auth/                            # primera feature: login
-│       ├── data-access/
-│       │   ├── auth.api.ts              # POST /auth/login, /refresh, /me
-│       │   └── auth.mapper.ts           # SessionDto ↔ Session
-│       ├── domain/
-│       │   ├── auth-user.model.ts
-│       │   ├── auth.dto.ts
-│       │   └── login-input.model.ts
-│       ├── feature/
-│       │   ├── login-page/login-page.component.ts        # SMART — usa AuthStore
-│       │   └── register-page/register-page.component.ts
-│       └── auth.routes.ts
-├── shared/                              # ✅ INTACTO — design system del template
-│   └── (igual que hoy)
-├── pages/                               # ⚠️ TRANSITORIO — se vacía a medida que migramos
-│   └── (las demos que aún no hemos reemplazado)
-├── app.component.ts
-├── app.config.ts                        # provideCore() + provideRouter + interceptors
-└── app.routes.ts                        # rutas top-level con loadChildren
+La convencion vigente del proyecto es `data/`, `models/`, `feature/` y `ui/`.
+No introducir en paralelo nombres como `data-access/` o `domain/`.
+
+```text
+features/<feature>/
+|-- data/
+|   |-- <feature>.service.ts      # estado y casos de uso de la feature
+|   |-- <feature>.api.ts          # HttpClient, cuando exista backend
+|   |-- <feature>.mapper.ts       # DTO <-> modelo, cuando sea necesario
+|   |-- <feature>.fixture.ts      # datos mock grandes, solo desarrollo
+|   `-- index.ts
+|-- models/
+|   |-- <feature>.model.ts        # modelos usados por la aplicacion
+|   |-- <feature>.dto.ts          # contrato exacto del backend
+|   |-- <feature>.types.ts        # uniones y tipos auxiliares
+|   `-- index.ts
+|-- feature/
+|   `-- <feature>-page/
+|       |-- <feature>-page.component.ts
+|       |-- <feature>-page.component.html
+|       `-- <feature>-page.component.spec.ts
+|-- ui/
+|   |-- <componente-presentacional>/
+|   |-- modals/
+|   `-- index.ts
+`-- <feature>.routes.ts
 ```
 
----
+No todas las features necesitan todos los archivos:
 
-## 4. Reglas de dependencias (no negociables)
+- Sin backend: no crear `*.api.ts` ni DTOs vacios.
+- Sin estado compartido: puede bastar estado local en la pagina.
+- Sin UI reutilizable dentro de la feature: omitir `ui/`.
+- Los fixtures pequenos pueden empezar junto al servicio, pero deben moverse a
+  `*.fixture.ts` cuando dificulten leer la logica.
 
-1. **`features/` no se importa entre sí.** Si dos features comparten algo, sube a `shared/` o `core/`.
-2. **`shared/` no importa de `features/` ni de `core/`.** Es la base — no conoce dominio.
-3. **`core/` no importa de `features/`.** Puede importar de `shared/`.
-4. **Componentes en `shared/components/`** NO inyectan stores de dominio. Reciben datos por `input()` y emiten por `output()`. (El `ModalService` y `ThemeService` actuales son la excepción — son utilidades transversales.)
-5. **Smart components** (en `features/<x>/feature/`) son los únicos que orquestan stores, routing y servicios.
-6. **`pages/*` está en cuarentena.** No añadas código nuevo ahí. Solo lo tocas para borrar o migrar.
+## 4. Reglas de dependencias
 
-Si necesitas violar una regla, primero replantea el diseño. Casi siempre es síntoma de mala separación.
+La direccion de dependencias es:
 
----
-
-## 5. Cómo migrar una página demo a una feature
-
-Ejemplo: convertir `pages/auth-pages/sign-in` en `features/auth`.
-
-**Paso 1 — Crea la feature** siguiendo el esqueleto canónico:
-```
-features/auth/
-├── domain/
-│   ├── auth-user.model.ts        # User limpio camelCase, Date, readonly
-│   ├── auth.dto.ts               # lo que devuelve el backend (snake_case)
-│   └── login-input.model.ts      # { email, password, remember }
-├── data-access/
-│   ├── auth.api.ts               # HttpClient con POST /auth/login
-│   └── auth.mapper.ts            # SessionDto → Session
-├── feature/
-│   └── login-page/
-│       └── login-page.component.ts   # SMART, inyecta AuthStore
-└── auth.routes.ts
+```text
+app -> core
+app -> features
+app -> shared
+features -> core
+features -> shared
+core -> shared
+shared -> Angular y librerias genericas
 ```
 
-**Paso 2 — Crea el store en `core/auth/auth.store.ts`** (la sesión es global, no solo de la feature):
+Reglas obligatorias:
+
+1. Una feature no importa archivos internos de otra feature.
+2. `shared/` no importa desde `features/`.
+3. `core/` no importa desde `features/`.
+4. Los componentes no usan `HttpClient` directamente.
+5. Los DTOs no llegan al template; se convierten a modelos de la aplicacion.
+6. Una pagina de `feature/` coordina datos, navegacion, modales y componentes UI.
+7. Un componente de `ui/` recibe datos con `input()` y comunica acciones con
+   `output()`.
+8. No mover codigo a `shared/` solo porque se usa dos veces dentro de una misma
+   feature. Primero debe ser generico y no depender del dominio.
+
+### Excepcion temporal: modales
+
+Algunos componentes actuales de `features/matriculacion/ui/` inyectan
+`ModalService` para abrir o cerrar modales. Para codigo nuevo:
+
+- La pagina debe abrir el modal cuando la accion forma parte de un flujo.
+- El componente UI debe emitir una accion como `verDocumento`.
+- Un componente usado como contenido de modal puede inyectar `ModalService`
+  solamente para cerrarse, hasta que exista una abstraccion `ModalRef`.
+- Un componente UI no debe inyectar servicios de datos de la feature.
+
+## 5. Responsabilidades por tipo de archivo
+
+### Pagina inteligente: `feature/`
+
+Una pagina:
+
+- Inyecta servicios o stores.
+- Expone signals y `computed()` al template.
+- Coordina componentes UI.
+- Abre modales y navega con `Router`.
+- No contiene tablas, formularios o dialogos extensos en un solo archivo.
+
 ```typescript
-// signal store con user, isAuthenticated, loading, error
-// llama AuthApi y persiste tokens en storage seguro
-```
-
-**Paso 3 — Reutiliza el UI del template**. El `SigninFormComponent` que ya existe en `shared/components/auth/signin-form/` queda en `shared/` pero se vuelve **puramente presentacional**:
-- Recibe `loading` y `error` por `input()`.
-- Emite `submit` con `{ email, password, remember }` por `output()`.
-- NO inyecta servicios.
-
-**Paso 4 — La smart component cablea todo**:
-```typescript
-// features/auth/feature/login-page/login-page.component.ts
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-alumnos-page',
   standalone: true,
-  imports: [AuthPageLayoutComponent, SigninFormComponent],
-  template: `
-    <app-auth-page-layout>
-      <app-signin-form
-        [loading]="authStore.loading()"
-        [error]="authStore.error()"
-        (submit)="onSubmit($event)"
-      />
-    </app-auth-page-layout>
-  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AlumnoTableComponent],
+  templateUrl: './alumnos-page.component.html',
 })
-export class LoginPageComponent {
-  protected readonly authStore = inject(AuthStore);
-  private readonly router = inject(Router);
+export class AlumnosPageComponent {
+  private readonly alumnosService = inject(AlumnosService);
+  private readonly modalService = inject(ModalService);
 
-  onSubmit(input: LoginInput): void {
-    this.authStore.login(input).subscribe((ok) => {
-      if (ok) this.router.navigateByUrl('/');
-    });
+  readonly alumnos = this.alumnosService.alumnos;
+  readonly loading = this.alumnosService.loading;
+
+  onEditar(alumno: Alumno): void {
+    this.modalService.open(AlumnoFormModalComponent, { alumno });
   }
 }
 ```
 
-**Paso 5 — Actualiza el routing top-level a lazy**:
+### Componente presentacional: `ui/`
+
+Un componente UI:
+
+- Usa `input()` y `output()`.
+- Puede tener estado visual local con `signal()`.
+- No conoce rutas, endpoints ni almacenamiento.
+- No modifica directamente el estado de la feature.
+
 ```typescript
-// app.routes.ts
-export const routes: Routes = [
-  {
-    path: 'auth',
-    loadChildren: () => import('@features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
-  },
+@Component({
+  selector: 'app-alumno-table',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DataTableComponent, ColumnTemplateDirective],
+  templateUrl: './alumno-table.component.html',
+})
+export class AlumnoTableComponent {
+  readonly alumnos = input.required<Alumno[]>();
+  readonly editar = output<Alumno>();
+  readonly eliminar = output<Alumno>();
+}
+```
+
+### Capa de datos: `data/`
+
+En features simples, un `*.service.ts` puede encapsular estado con signals:
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class AlumnosService {
+  private readonly _alumnos = signal<Alumno[]>([]);
+  private readonly _loading = signal(false);
+
+  readonly alumnos = this._alumnos.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly total = computed(() => this._alumnos().length);
+}
+```
+
+Cuando se conecte un backend, separar responsabilidades:
+
+- `*.api.ts`: solicitudes HTTP tipadas.
+- `*.dto.ts`: respuesta exacta del backend.
+- `*.mapper.ts`: conversion DTO/modelo.
+- `*.service.ts` o `*.store.ts`: estado y casos de uso.
+
+No mezclar en un mismo archivo grande fixtures, HTTP, mapeo, estado y
+generacion de documentos.
+
+### Modelos: `models/`
+
+- `interface` para entidades y contratos de objetos.
+- `type` para uniones, estados y composiciones.
+- Propiedades `readonly` cuando no deban mutarse.
+- `unknown` y type guards para datos no confiables.
+- No usar `any`, `as any` ni `@ts-ignore`.
+- Fechas del backend pueden llegar como string en DTO; el modelo decide si usa
+  `Date` o un string normalizado.
+
+## 6. Convenciones Angular
+
+Todo componente nuevo debe seguir este patron:
+
+```typescript
+@Component({
+  selector: 'app-ejemplo',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [],
+  templateUrl: './ejemplo.component.html',
+})
+export class EjemploComponent {}
+```
+
+Reglas:
+
+- Usar `inject()` en codigo nuevo, no inyeccion por constructor.
+- Usar `input()`, `input.required()` y `output()`, no decoradores
+  `@Input()`/`@Output()`.
+- Usar `@if`, `@for`, `@switch` y `@defer`, no `*ngIf` ni `*ngFor`.
+- Signals para estado sincronico: `signal`, `computed`, `linkedSignal`.
+- RxJS para HTTP y flujos asincronos.
+- Usar `async` pipe, `toSignal()` o `takeUntilDestroyed()` para evitar fugas.
+- No hacer `subscribe()` anidados.
+- Mantener el template declarativo; mover calculos complejos a `computed()`.
+- Evitar componentes de negocio de mas de unas 200 lineas. Dividir por
+  responsabilidad, no por cantidad arbitraria de HTML.
+
+`shared/` conserva componentes heredados de TailAdmin con constructor,
+`@Input()`, `@Output()` e incluso algunos `any`. Son deuda tecnica compatible
+con la plantilla, no el estandar para archivos nuevos.
+
+### Naming
+
+| Elemento | Convencion | Ejemplo |
+|---|---|---|
+| Archivos y carpetas | `kebab-case` | `alumno-form-modal.component.ts` |
+| Clases e interfaces | `PascalCase` | `AlumnosService`, `AlumnoDto` |
+| Variables y metodos | `camelCase` | `alumnosFiltrados`, `cargarAlumnos()` |
+| Constantes globales | `SCREAMING_SNAKE_CASE` | `ALUMNOS_ROUTES` |
+| Selectores | `app-<kebab-case>` | `app-alumno-table` |
+| Signals privados mutables | prefijo `_` | `_alumnos` |
+| Signals publicos | nombre descriptivo sin `$` | `alumnos`, `loading` |
+| Observables | sufijo `$` | `alumnos$` |
+
+Sufijos habituales: `.component.ts`, `.service.ts`, `.store.ts`, `.api.ts`,
+`.mapper.ts`, `.model.ts`, `.dto.ts`, `.types.ts`, `.routes.ts`,
+`.guard.ts`, `.interceptor.ts`, `.pipe.ts` y `.directive.ts`.
+
+## 7. Routing y navegacion
+
+Cada feature publica sus propias rutas:
+
+```typescript
+import { Routes } from '@angular/router';
+
+export const ALUMNOS_ROUTES: Routes = [
   {
     path: '',
-    component: AppLayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      // dashboard y demás rutas privadas...
-    ],
+    loadComponent: () =>
+      import('./feature/alumnos-page/alumnos-page.component').then(
+        (m) => m.AlumnosPageComponent,
+      ),
+    title: 'Alumnos',
   },
-  { path: '**', component: NotFoundComponent },
 ];
 ```
 
-**Paso 6 — Borra** `pages/auth-pages/sign-in/` y `sign-up/`. Los imports en `app.routes.ts` quedan obsoletos: límpialos.
+`app.routes.ts` solo compone rutas de primer nivel:
 
-Repite este patrón para cada página demo que reemplaces (profile, ecommerce, etc.).
-
----
-
-## 6. Convenciones de código (obligatorias)
-
-- **Standalone components siempre.** Angular 21 ya los pone por defecto.
-- **Signals** (`signal`, `computed`, `effect`) para estado. RxJS solo para HTTP, eventos, debounce.
-- **`inject()`** en lugar de constructor injection.
-- **Control flow nuevo**: `@if`, `@for`, `@switch`, `@defer`. NUNCA `*ngIf`, `*ngFor`.
-- **`input()` / `output()`** funciones, no decoradores.
-- **`ChangeDetectionStrategy.OnPush`** en todo componente nuevo.
-- **Lazy loading** vía `loadChildren` apuntando a `*.routes.ts` en cada feature.
-- **Strict TypeScript** (ya activo): cero `any`, cero `as`, cero `@ts-ignore` sin justificación.
-- **Tres capas de tipos**: DTOs (`*.dto.ts`, snake_case), Models (`*.model.ts`, camelCase, Date, readonly), opcionalmente ViewModels (`*.vm.ts`).
-- **Mapper** entre DTO y Model. La UI **nunca** ve DTOs.
-- **`takeUntilDestroyed()`** en cualquier `subscribe()` dentro de componentes o de stores no-singleton.
-
----
-
-## 7. Naming
-
-| Tipo | Convención | Ejemplo |
-|------|------------|---------|
-| Archivos | `kebab-case` | `auth.store.ts`, `login-page.component.ts` |
-| Clases | `PascalCase` | `AuthStore`, `LoginPageComponent` |
-| Métodos, variables, props | `camelCase` | `isAuthenticated`, `loadAll()` |
-| Constantes globales | `SCREAMING_SNAKE` | `API_BASE_URL`, `AUTH_ROUTES` |
-| InjectionTokens | `SCREAMING_SNAKE` | `API_BASE_URL` |
-| Selector de componente | `app-<kebab>` | `app-login-page`, `app-signin-form` |
-
-**Sufijos de archivo**: `.component.ts`, `.service.ts`, `.store.ts`, `.api.ts`, `.guard.ts`, `.interceptor.ts`, `.pipe.ts`, `.directive.ts`, `.model.ts`, `.dto.ts`, `.mapper.ts`, `.types.ts`, `.routes.ts`, `.util.ts`.
-
----
-
-## 8. Path aliases (a configurar en `tsconfig.json`)
-
-```json
+```typescript
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@features/*": ["src/app/features/*"],
-      "@env/*": ["src/environments/*"]
-    }
+  path: 'alumnos',
+  loadChildren: () =>
+    import('./features/alumnos/alumnos.routes').then(
+      (m) => m.ALUMNOS_ROUTES,
+    ),
+}
+```
+
+Al agregar una ruta visible en el menu, actualizar tambien:
+
+```text
+src/app/shared/config/nav-items.ts
+```
+
+No declarar componentes de una feature de forma eager en `app.routes.ts`.
+
+## 8. Imports y barrels
+
+Actualmente `tsconfig.json` no define aliases. Por tanto:
+
+- Usar imports relativos validos.
+- No escribir `@/`, `@core`, `@shared` o `@features` hasta configurarlos.
+- Se permiten barrels locales ya existentes: `../../data`, `../../models`,
+  `../../ui` y `../../../../core`.
+- Evitar un barrel global que reexporte toda la aplicacion y genere ciclos.
+
+Si se adoptan aliases, debe hacerse en un cambio unico que:
+
+1. Configure `baseUrl` y `paths`.
+2. Migre los imports existentes.
+3. Ejecute el build completo.
+
+No documentar aliases como disponibles antes de realizar esos tres pasos.
+
+## 9. Design system y estilos
+
+Antes de crear un componente visual, revisar `src/app/shared/components/`.
+
+Componentes preferidos:
+
+| Necesidad | Componente |
+|---|---|
+| Botones | `<app-button>` |
+| Estados y etiquetas | `<app-badge>` |
+| Listados tabulares | `<app-data-table>` |
+| Select estilizado | `<app-select>` |
+| Acciones por fila | `<app-table-dropdown>` |
+| Encabezado de pagina | `<app-page-breadcrumb>` |
+
+Reglas:
+
+- Usar `class="card"` o `class="card-flat"` para superficies.
+- No repetir manualmente el patron de tarjeta de Tailwind.
+- No crear tablas de listados con `<table>` si `DataTableComponent` cubre el caso.
+- No usar `<select>` nativo si `SelectComponent` cubre el caso.
+- No hardcodear colores hexadecimales en componentes.
+- Usar tokens `brand`, `success`, `error`, `warning`, `secondary` y grises
+  definidos en `src/styles.css`.
+- Mantener dark mode en cualquier UI nueva.
+- Editar `src/app/shared/config/nav-items.ts` como fuente unica del menu.
+
+## 10. Modal global
+
+La aplicacion tiene un unico outlet en `app.component.html`:
+
+```html
+<router-outlet />
+<app-modal-outlet />
+```
+
+Abrir un modal:
+
+```typescript
+this.modalService.open(
+  AlumnoFormModalComponent,
+  { alumno },
+  { size: 'lg' },
+);
+```
+
+El componente dinamico declara inputs compatibles:
+
+```typescript
+readonly alumno = input.required<Alumno>();
+```
+
+Cerrar:
+
+```typescript
+private readonly modalService = inject(ModalService);
+
+onCerrar(): void {
+  this.modalService.close();
+}
+```
+
+Consideraciones:
+
+- Solo existe un modal activo; abrir otro reemplaza el actual.
+- Para encadenar modales, cerrar el actual antes de abrir el siguiente.
+- Tamanos disponibles: `sm`, `md`, `lg`, `xl`, `2xl`, `full`.
+- No crear outlets o servicios modales adicionales por feature.
+
+## 11. Flujo para crear una feature
+
+Ejemplo: `alumnos`.
+
+### Paso 1: definir el alcance
+
+Antes de crear archivos, identificar:
+
+- Ruta publica.
+- Modelos y estados.
+- Operaciones del usuario.
+- Endpoint y DTO, si existe backend.
+- Componentes compartidos que ya resuelven la UI.
+
+### Paso 2: crear el esqueleto
+
+```text
+src/app/features/alumnos/
+|-- data/
+|-- models/
+|-- feature/alumnos-page/
+|-- ui/
+`-- alumnos.routes.ts
+```
+
+Angular CLI puede generar los componentes:
+
+```powershell
+npx ng generate component features/alumnos/feature/alumnos-page --standalone --change-detection OnPush --style none
+npx ng generate component features/alumnos/ui/alumno-table --standalone --change-detection OnPush --style none
+npx ng generate service features/alumnos/data/alumnos
+```
+
+Revisar siempre el resultado del generador. No conservar archivos vacios ni
+imports que no se usan.
+
+### Paso 3: implementar en este orden
+
+1. Crear modelos y tipos en `models/`.
+2. Crear DTO y mapper si hay backend.
+3. Crear API client si hay HTTP.
+4. Crear servicio/store con estado y casos de uso.
+5. Crear componentes UI con inputs y outputs.
+6. Crear la pagina que orquesta el flujo.
+7. Crear `<feature>.routes.ts`.
+8. Registrar lazy loading en `app.routes.ts`.
+9. Agregar el item en `nav-items.ts`, si corresponde.
+10. Agregar pruebas y ejecutar build.
+
+### Paso 4: barrels locales
+
+Usar `index.ts` solo si reduce imports sin ocultar dependencias:
+
+```typescript
+// features/alumnos/models/index.ts
+export * from './alumno.model';
+export * from './alumno.types';
+```
+
+No usar `export *` para publicar detalles internos que ninguna otra capa
+necesita.
+
+## 12. Donde crear cada archivo
+
+| Necesidad | Ubicacion |
+|---|---|
+| Pagina de una ruta | `features/<x>/feature/<x>-page/` |
+| Tabla, toolbar o selector propio del dominio | `features/<x>/ui/` |
+| Modal propio del dominio | `features/<x>/ui/modals/` |
+| Estado y casos de uso de la feature | `features/<x>/data/` |
+| Cliente HTTP de la feature | `features/<x>/data/<x>.api.ts` |
+| Modelo, DTO o tipos del dominio | `features/<x>/models/` |
+| Componente visual generico | `shared/components/` |
+| Pipe generico | `shared/pipes/` |
+| Layout de aplicacion | `shared/layout/` |
+| Servicio global de infraestructura | `core/services/` o subdominio de `core/` |
+| Guard o interceptor global | `core/auth/`, `core/http/` o carpeta equivalente |
+| Imagen o archivo estatico | `public/` |
+
+## 13. HTTP y manejo de errores
+
+Cuando se incorpore la API:
+
+1. Registrar `provideHttpClient()` en `app.config.ts`.
+2. Centralizar URL base mediante configuracion o `InjectionToken`.
+3. Crear interceptores funcionales para autenticacion y errores.
+4. Tipar cada respuesta con DTOs.
+5. Mapear errores a un tipo estable para la UI.
+6. No mostrar directamente `HttpErrorResponse` en componentes.
+7. Cancelar o reemplazar solicitudes de busqueda con operadores como
+   `switchMap`.
+
+Ejemplo de API client:
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class AlumnosApi {
+  private readonly http = inject(HttpClient);
+
+  listar(): Observable<AlumnoDto[]> {
+    return this.http.get<AlumnoDto[]>('/api/alumnos');
   }
 }
 ```
 
-Después, los imports dejan de ser `../../../../shared/...` y pasan a `@shared/...`.
+## 14. Pruebas y validacion
 
----
+Minimo antes de considerar una feature terminada:
 
-## 9. Flujo estricto para crear una feature nueva
-
-Cuando se pida "crea la feature de X":
-
-1. **Modelo de dominio** → `features/<x>/domain/<x>.model.ts`
-2. **DTO** → `features/<x>/domain/<x>.dto.ts` (según contrato API)
-3. **Mapper** → `features/<x>/data-access/<x>.mapper.ts`
-4. **API client** → `features/<x>/data-access/<x>.api.ts` (encapsula `HttpClient`)
-5. **Store** (si la feature tiene estado) → `features/<x>/data-access/<x>.store.ts`
-6. **Componentes UI puros** → `features/<x>/ui/` (solo `input()`/`output()`)
-7. **Smart components** → `features/<x>/feature/` (orquestan store + router)
-8. **Rutas** → `features/<x>/<x>.routes.ts`
-9. **Registro lazy** en `app.routes.ts` con `loadChildren`
-
-No saltes pasos. No empieces por el componente.
-
----
-
-## 10. Anti-patrones prohibidos en este proyecto
-
-- Componentes con más de 200 líneas → divide.
-- Lógica de negocio en templates → muévela al store o a un `computed`.
-- Llamadas HTTP directas desde un componente → siempre vía `*.api.ts`.
-- DTOs paseados por la UI → siempre vía mapper.
-- Modales duplicados → reutiliza `shared/services/modal.service.ts`.
-- `subscribe()` sin `takeUntilDestroyed()` o sin async pipe → memory leak.
-- `any`, `as any`, `@ts-ignore` → prohibido salvo justificación documentada.
-- Importar entre features (`@features/users` desde `@features/orders`) → prohibido.
-- Código de negocio nuevo en `pages/*` → todo lo nuevo va a `features/*`.
-- Renombrar/reorganizar `shared/components/*` "porque sí" → rompes el design system de la plantilla y heredas conflictos en futuros updates.
-
----
-
-## 11. App config — `provideCore()` y bootstrap
-
-Patrón objetivo para `app.config.ts`:
-
-```typescript
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { routes } from './app.routes';
-import { authInterceptor } from '@core/auth/auth.interceptor';
-import { errorInterceptor } from '@core/http/error.interceptor';
-import { API_BASE_URL } from '@core/config/environment.tokens';
-import { environment } from '@env/environment';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor]),
-    ),
-    { provide: API_BASE_URL, useValue: environment.apiBaseUrl },
-  ],
-};
+```powershell
+npm run build
+npm test
 ```
 
----
+Cobertura prioritaria:
 
-## 12. Login — receta concreta para este proyecto
+- Servicios: filtros, paginacion, transiciones de estado y errores.
+- Mappers: datos incompletos, nulos y formatos del backend.
+- Componentes UI: inputs, outputs y estados vacio/loading.
+- Paginas: coordinacion de acciones importantes.
+- Rutas: carga lazy y guards cuando existan.
 
-Orden de implementación recomendado (alineado con la sección 5):
+No afirmar que un cambio esta completo si no compila. Si no se pudieron ejecutar
+pruebas, dejarlo indicado explicitamente.
 
-1. **Crear** `src/environments/environment.ts` con `apiBaseUrl`.
-2. **Crear** `core/config/environment.tokens.ts` con `API_BASE_URL`.
-3. **Crear** `core/auth/auth.types.ts` (`AuthUser`, `Session`, `AuthTokens`).
-4. **Crear** `features/auth/domain/auth.dto.ts` (lo que devuelve el backend).
-5. **Crear** `features/auth/data-access/auth.mapper.ts`.
-6. **Crear** `features/auth/data-access/auth.api.ts` (`login()`, `refresh()`, `me()`, `logout()`).
-7. **Crear** `core/auth/auth.store.ts` (signals: `user`, `isAuthenticated`, `loading`, `error`; métodos: `login`, `logout`, `restoreSession`).
-8. **Crear** `core/auth/auth.interceptor.ts` (añade `Bearer` solo a URLs de `API_BASE_URL`).
-9. **Crear** `core/auth/auth.guard.ts` (función `authGuard: CanActivateFn`).
-10. **Crear** `features/auth/feature/login-page/login-page.component.ts` reutilizando `AuthPageLayoutComponent` + `SigninFormComponent`.
-11. **Crear** `features/auth/auth.routes.ts` con rutas `login`, `register`.
-12. **Actualizar** `app.routes.ts` para lazy load de `@features/auth` y proteger `AppLayoutComponent` con `authGuard`.
-13. **Actualizar** `app.config.ts` con `provideHttpClient` + interceptors + `API_BASE_URL`.
-14. **Borrar** `pages/auth-pages/sign-in` y `pages/auth-pages/sign-up`. Limpiar imports en `app.routes.ts`.
-15. **Probar** flujo: navegar a `/auth/login`, login válido → redirige a `/`. Login inválido → error visible. Reload → sesión persiste.
+## 15. Deuda tecnica conocida
 
-**Decisiones pendientes antes de empezar** (preguntar al user):
-- ¿Backend real o mock? ¿URL?
-- ¿JWT (access + refresh) o sesión cookie?
-- ¿"Recordarme" → localStorage; sino → sessionStorage?
+Estos puntos existen hoy, pero no deben propagarse:
 
----
+1. Parte de `shared/` aun usa APIs heredadas: constructores, `@Input()`,
+   `@Output()` y algunos `any`.
+2. Algunos componentes UI de matriculacion abren modales o inyectan servicios
+   de datos; los nuevos flujos deben orquestarse desde la pagina.
+3. Hay fixtures grandes dentro de servicios; deben extraerse cuando se conecte
+   el backend o crezca la logica.
+4. `example-pdf-viewer/` esta fuera de una feature y debe considerarse ejemplo
+   temporal.
+5. No hay aliases configurados aunque algunas guias anteriores los mostraban.
+6. `app.config.ts` todavia no registra `HttpClient`; debe agregarse al integrar
+   la primera API real.
 
-## 13. Plan de limpieza de la plantilla (orden sugerido)
+La deuda se corrige de forma incremental al tocar cada area. No hacer una
+reescritura masiva de TailAdmin sin pruebas y sin una necesidad funcional.
 
-A medida que tengas features reales, borra en este orden:
+## 16. Checklist de revision
 
-1. `pages/auth-pages/*` → reemplazado por `features/auth/`.
-2. `pages/dashboard/ecommerce/` → cuando exista tu dashboard real (`features/dashboard/`).
-3. `pages/profile/` → cuando exista `features/profile/`.
-4. `pages/forms/`, `pages/tables/`, `pages/charts/`, `pages/ui-elements/`, `pages/calender/`, `pages/invoices/` → son **demos de la plantilla**. Bórralas en bloque cuando ya hayas copiado el markup que te servía a tus features.
-5. `pages/blank/` y `pages/other-page/not-found/` → la 404 se queda (o se mueve a `shared/feature/not-found/`).
+Antes de aprobar codigo nuevo:
 
-**No borres**:
-- `shared/components/*` (design system)
-- `shared/layout/*` (shells)
-- `shared/services/{modal,sidebar,theme}.service.ts` (utilidades transversales)
-- `shared/pipe/safe-html.pipe.ts`
+- [ ] El archivo esta en la capa correcta.
+- [ ] La feature no importa otra feature.
+- [ ] El componente es standalone y usa OnPush.
+- [ ] El codigo nuevo usa `inject()`, `input()` y `output()`.
+- [ ] No se introdujeron `any`, `@ts-ignore` o casts inseguros.
+- [ ] No hay HTTP directo desde componentes.
+- [ ] La UI reutiliza componentes y tokens existentes.
+- [ ] La ruta usa lazy loading.
+- [ ] El menu se actualizo si la ruta debe ser visible.
+- [ ] Los modales usan el outlet global.
+- [ ] Los estados loading, vacio y error estan contemplados.
+- [ ] El build y las pruebas pasan.
 
----
+## 17. Referencias del repositorio
 
-## 14. Referencias detalladas
+- `CLAUDE.md`: reglas especificas del design system.
+- `references/folder-structure.md`: explicacion amplia de capas.
+- `references/typing-conventions.md`: tipado estricto y DTO/modelo.
+- `references/state-management.md`: patrones de estado con signals.
+- `references/multi-api-strategy.md`: integracion con multiples APIs.
+- `references/templates/new-feature-templates.md`: plantillas de ejemplo.
 
-Para profundizar en cada tema, consulta los archivos ya existentes en `references/`:
-
-- `references/folder-structure.md` — Detalle exhaustivo de qué va en `core/`, `shared/`, `features/`, `layouts/`.
-- `references/typing-conventions.md` — Tres capas DTO/Model/VM, type guards, genéricos, utility types, strict config.
-- `references/state-management.md` — Signal store custom, NgRx Signal Store, effects, event bus, comunicación entre features.
-- `references/multi-api-strategy.md` — Interceptors condicionales por URL, `AppError` unificado, retry/cache.
-- `references/templates/new-feature-templates.md` — Plantillas copy-paste para domain, dto, mapper, api, store, smart, dumb, routes.
-
----
-
-## 15. Resumen ejecutivo
-
-1. **La plantilla TailAdmin se queda**. Es tu design system.
-2. **`shared/` y `shared/layout/` no se tocan** salvo para mantener.
-3. **`pages/` está en cuarentena**: nada nuevo, solo se borra al migrar.
-4. **Todo código nuevo de negocio vive en `features/<dominio>/`** siguiendo el esqueleto canónico (`domain`, `data-access`, `feature`, `ui`).
-5. **Singletons globales en `core/`** (auth, http, config, logging).
-6. **Lazy loading siempre.** Path aliases siempre. Signals siempre. Standalone siempre.
-7. **El login** es la primera feature real y abre el camino: define `core/auth/`, `features/auth/`, interceptor, guard, store, y se conecta al `SigninFormComponent` existente como UI presentacional.
+En caso de contradiccion, prevalecen el codigo vigente y este documento.
