@@ -68,6 +68,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": ["dev-sigp-v3.posgradoupea.edu.bo", "localhost"]
+          },
           "configurations": {
             "production": {
               "buildTarget": "ng-tailadmin:build:production"

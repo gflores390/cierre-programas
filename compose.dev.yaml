@@ -1,0 +1,16 @@
+services:
+  sigp-v3:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: sigp-v3:20260616
+    container_name: sigp-v3
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - web_network
+    
+networks:
+  web_network:
+    external: true

@@ -1,0 +1,17 @@
+# app de angular para entorno de desarrollo
+FROM node:24.16-slim
+
+WORKDIR /app
+
+# instalar ng
+RUN npm install -g @angular/cli
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "start", "--", "--host", "0.0.0.0"]
