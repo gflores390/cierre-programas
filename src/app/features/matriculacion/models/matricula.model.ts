@@ -4,6 +4,13 @@ export type EstadoMatricula =
   | 'retirado'
   | 'egresado';
 
+export type TipoPrograma =
+  | 'diplomado'
+  | 'especialidad'
+  | 'maestria'
+  | 'doctorado'
+  | 'postdoctorado';
+
 export type EstadoDeposito = 'comprobado' | 'pendiente' | 'rechazado';
 
 export interface Deposito {
@@ -55,6 +62,7 @@ export interface Matricula {
   estadoCivil?: string;
   domicilio?: string;
   depositos?: Deposito[];
+  tipoPrograma?: TipoPrograma;  // ← aquí
 }
 
 export interface MatriculaFiltro {
@@ -74,6 +82,7 @@ export interface Programa {
   modalidad: string;
   cupos: number;
   inscritos: number;
+  tipoPrograma?: TipoPrograma;
 }
 
 export interface SeleccionPrograma {
@@ -82,4 +91,12 @@ export interface SeleccionPrograma {
   sede: string;
   modalidad: string;
   programa: string;
+}
+export interface ConteoPorTipoPrograma {
+  todos: number;
+  diplomado: number;
+  especialidad: number;
+  maestria: number;
+  doctorado: number;
+  postdoctorado: number;
 }

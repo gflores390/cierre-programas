@@ -1,5 +1,6 @@
 <app-page-breadcrumb pageTitle="Matriculación" />
 
+ <app-state-cards [data]="stats()"/>
 <div class="flex flex-col gap-6">
   <app-programa-selector
     [seleccion]="seleccionPrograma()"
@@ -21,7 +22,8 @@
           Gestiona las matrículas del año académico {{ filtro().gestion }} · {{ totalFiltradas().length }} resultados
         </p>
       </div>
-
+  
+        
       <app-matricula-toolbar
         [busqueda]="filtro().busqueda"
         [estado]="filtro().estado"

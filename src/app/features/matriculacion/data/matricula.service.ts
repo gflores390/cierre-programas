@@ -6,6 +6,8 @@ import {
   MatriculaFiltro,
   Programa,
   SeleccionPrograma,
+  TipoPrograma,
+  ConteoPorTipoPrograma,
 } from '../models/matricula.model';
 
 const DEPOSITOS_MOCK: Record<number, Deposito[]> = {
@@ -39,16 +41,16 @@ const DEPOSITOS_MOCK: Record<number, Deposito[]> = {
 };
 
 const PROGRAMAS_MOCK: Programa[] = [
-  { id: 1, nombre: 'Desarrollo de Software', turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial', cupos: 30, inscritos: 22 },
-  { id: 2, nombre: 'Desarrollo de Software', turno: 'Tarde',  version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial', cupos: 30, inscritos: 28 },
-  { id: 3, nombre: 'Contabilidad General',   turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial', cupos: 25, inscritos: 10 },
-  { id: 4, nombre: 'Administración de Empresas', turno: 'Noche', version: 'v1', gestion: '2025', sede: 'central', modalidad: 'semipresencial', cupos: 40, inscritos: 35 },
-  { id: 5, nombre: 'Enfermería',             turno: 'Mañana', version: 'v2', gestion: '2025', sede: 'norte',   modalidad: 'presencial', cupos: 20, inscritos: 18 },
-  { id: 6, nombre: 'Sistemas de Información',turno: 'Tarde',  version: 'v2', gestion: '2025', sede: 'norte',   modalidad: 'presencial', cupos: 30, inscritos: 15 },
-  { id: 7, nombre: 'Turismo y Hotelería',    turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'sur',     modalidad: 'presencial', cupos: 25, inscritos: 20 },
-  { id: 8, nombre: 'Contabilidad General',   turno: 'Tarde',  version: 'v1', gestion: '2025', sede: 'sur',     modalidad: 'virtual',    cupos: 50, inscritos: 42 },
-  { id: 9, nombre: 'Desarrollo de Software', turno: 'Mañana', version: 'v1', gestion: '2024', sede: 'central', modalidad: 'presencial', cupos: 30, inscritos: 30 },
-  { id: 10, nombre: 'Administración de Empresas', turno: 'Tarde', version: 'v2', gestion: '2024', sede: 'norte', modalidad: 'virtual', cupos: 45, inscritos: 38 },
+  { id: 1,  tipoPrograma: 'diplomado',     nombre: 'Desarrollo de Software',     turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial',    cupos: 30, inscritos: 22 },
+  { id: 2,  tipoPrograma: 'maestria',      nombre: 'Desarrollo de Software',     turno: 'Tarde',  version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial',    cupos: 30, inscritos: 28 },
+  { id: 3,  tipoPrograma: 'especialidad',  nombre: 'Contabilidad General',       turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'central', modalidad: 'presencial',    cupos: 25, inscritos: 10 },
+  { id: 4,  tipoPrograma: 'doctorado',     nombre: 'Administración de Empresas', turno: 'Noche',  version: 'v1', gestion: '2025', sede: 'central', modalidad: 'semipresencial', cupos: 40, inscritos: 35 },
+  { id: 5,  tipoPrograma: 'maestria',      nombre: 'Enfermería',                 turno: 'Mañana', version: 'v2', gestion: '2025', sede: 'norte',   modalidad: 'presencial',    cupos: 20, inscritos: 18 },
+  { id: 6,  tipoPrograma: 'diplomado',     nombre: 'Sistemas de Información',    turno: 'Tarde',  version: 'v2', gestion: '2025', sede: 'norte',   modalidad: 'presencial',    cupos: 30, inscritos: 15 },
+  { id: 7,  tipoPrograma: 'postdoctorado', nombre: 'Turismo y Hotelería',        turno: 'Mañana', version: 'v1', gestion: '2025', sede: 'sur',     modalidad: 'presencial',    cupos: 25, inscritos: 20 },
+  { id: 8,  tipoPrograma: 'especialidad',  nombre: 'Contabilidad General',       turno: 'Tarde',  version: 'v1', gestion: '2025', sede: 'sur',     modalidad: 'virtual',       cupos: 50, inscritos: 42 },
+  { id: 9,  tipoPrograma: 'maestria',      nombre: 'Desarrollo de Software',     turno: 'Mañana', version: 'v1', gestion: '2024', sede: 'central', modalidad: 'presencial',    cupos: 30, inscritos: 30 },
+  { id: 10, tipoPrograma: 'doctorado',     nombre: 'Administración de Empresas', turno: 'Tarde',  version: 'v2', gestion: '2024', sede: 'norte',   modalidad: 'virtual',       cupos: 45, inscritos: 38 },
 ];
 
 const DATOS_INICIALES: Matricula[] = [
@@ -244,6 +246,16 @@ export class MatriculaService {
     for (const matricula of matriculas) conteo[matricula.estado]++;
     return conteo;
   });
+ readonly conteoPorTipoPrograma = computed((): ConteoPorTipoPrograma => {
+  return {
+    todos:         PROGRAMAS_MOCK.length,
+    diplomado:     PROGRAMAS_MOCK.filter(p => p.tipoPrograma === 'diplomado').length,
+    especialidad:  PROGRAMAS_MOCK.filter(p => p.tipoPrograma === 'especialidad').length,
+    maestria:      PROGRAMAS_MOCK.filter(p => p.tipoPrograma === 'maestria').length,
+    doctorado:     PROGRAMAS_MOCK.filter(p => p.tipoPrograma === 'doctorado').length,
+    postdoctorado: PROGRAMAS_MOCK.filter(p => p.tipoPrograma === 'postdoctorado').length,
+  };
+});
 
   actualizarBusqueda(termino: string): void {
     this._filtro.update((actual) => ({ ...actual, busqueda: termino }));

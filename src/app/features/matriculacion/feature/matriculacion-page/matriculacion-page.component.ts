@@ -1,9 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
 import { ModalService } from '../../../../core';
 import { PageBreadcrumbComponent } from '../../../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { MatriculaService } from '../../data';
-import { EstadoMatricula, Matricula, Programa } from '../../models';
+import { ConteoPorTipoPrograma, EstadoMatricula, Matricula, Programa } from '../../models';
 import {
   DescargaListadoModalComponent,
   MatriculaTableComponent,
@@ -11,7 +11,7 @@ import {
   MatricularModalComponent,
   ProgramaSelectorComponent,
 } from '../../ui';
-
+import { StateCardsComponent } from '../../ui/state-cards/state-cards.component';
 @Component({
   selector: 'app-matriculacion-page',
   standalone: true,
@@ -29,22 +29,37 @@ import {
     ProgramaSelectorComponent,
     MatriculaToolbarComponent,
     MatriculaTableComponent,
+    StateCardsComponent,
   ],
   templateUrl: './matriculacion-page.component.html',
 })
+
 export class MatriculacionPageComponent {
   private readonly matriculaService = inject(MatriculaService);
   private readonly modalService     = inject(ModalService);
 
-  readonly filtro             = this.matriculaService.filtro;
-  readonly seleccionPrograma  = this.matriculaService.seleccionPrograma;
-  readonly programasFiltrados = this.matriculaService.programasFiltrados;
-  readonly conteoPorEstado    = this.matriculaService.conteoPorEstado;
-  readonly matriculas         = this.matriculaService.paginaActual;
-  readonly pagina             = this.matriculaService.pagina;
-  readonly totalPaginas       = this.matriculaService.totalPaginas;
-  readonly porPagina          = this.matriculaService.porPagina;
-  readonly totalFiltradas     = this.matriculaService.matriculasFiltradas;
+  readonly filtro                = this.matriculaService.filtro;
+  readonly seleccionPrograma     = this.matriculaService.seleccionPrograma;
+  readonly programasFiltrados    = this.matriculaService.programasFiltrados;
+  readonly conteoPorEstado       = this.matriculaService.conteoPorEstado;
+  readonly matriculas            = this.matriculaService.paginaActual;
+  readonly pagina                = this.matriculaService.pagina;
+  readonly totalPaginas          = this.matriculaService.totalPaginas;
+  readonly porPagina             = this.matriculaService.porPagina;
+  readonly totalFiltradas        = this.matriculaService.matriculasFiltradas;
+  readonly conteoPorTipoPrograma = this.matriculaService.conteoPorTipoPrograma;
+
+  readonly stats = computed(() => {
+  const conteo = this.conteoPorTipoPrograma();
+  return [
+    { label: 'TODOS',          value: conteo.todos         },
+    { label: 'DIPLOMADO',      value: conteo.diplomado      },
+    { label: 'ESPECIALIDAD',   value: conteo.especialidad   },
+    { label: 'MAESTRÍA',       value: conteo.maestria       },
+    { label: 'DOCTORADO',      value: conteo.doctorado      },
+    { label: 'POST DOCTORADO', value: conteo.postdoctorado  },
+  ];
+});
 
   onMatricular(matricula: Matricula): void {
     this.modalService.open(

@@ -1,0 +1,15 @@
+<!-- Opción 1: Nueva sintaxis (recomendada, consistente con el padre) -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+  @for (item of data; track item.label) {
+    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col gap-2">
+      <span class="text-2xl font-semibold text-gray-800 dark:text-white">{{ item.value }}</span>
+      <span class="text-xs text-gray-400 uppercase tracking-wide">{{ item.label }}</span>
+      <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1">
+        <div
+          class="bg-blue-500 h-1 rounded-full transition-all duration-500"
+          [style.width.%]="getPercent(item.value)"
+        ></div>
+      </div>
+    </div>
+  }
+</div>
