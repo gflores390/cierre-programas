@@ -1,0 +1,74 @@
+<div class="p-6 bg-white rounded-lg shadow-sm">
+  <h2 class="text-2xl font-semibold text-blue-600 mb-6">Registro de Posgraduantes</h2>
+
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <label class="text-gray-600">Mostrar </label>
+      <select class="border rounded p-1">
+        <option>10</option>
+      </select>
+      <span class="text-gray-600"> registros</span>
+    </div>
+    <div>
+      <label class="text-gray-600 mr-2">Buscar:</label>
+      <input type="text" class="border rounded p-1 bg-gray-50" />
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b bg-gray-50 text-gray-700 font-semibold text-sm">
+          <th class="p-3">👤</th>
+          <th class="p-3">CI</th>
+          <th class="p-3">Nombre Completo</th>
+          <th class="p-3">Celular</th>
+          <th class="p-3">Correo Electrónico</th>
+          <th class="p-3">Fecha de Nacimiento</th>
+          <th class="p-3 text-center">.::Opciones::.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of posgraduantes" class="border-b hover:bg-gray-50 text-sm text-gray-800">
+          <td class="p-3">👤</td>
+          <td class="p-3 font-medium">{{ p.ci }}</td>
+          <td class="p-3">{{ p.nombre }}</td>
+          <td class="p-3">{{ p.celular }}</td>
+          <td class="p-3 text-blue-500">{{ p.correo }}</td>
+          <td class="p-3">{{ p.fecha }}</td>
+          <td class="p-3">
+            <div class="flex gap-2 justify-center">
+              <button class="flex items-center gap-2 px-3 py-2 text-xs border border-blue-500 text-blue-500 rounded-full
+             hover:bg-blue-500 hover:text-white transition-all duration-200">
+                <lucide-icon [img]="Info" class="w-4 h-4"></lucide-icon>
+                <span>Información</span>
+              </button>
+
+              <button class="flex items-center gap-2 px-3 py-2 text-xs border border-orange-500 text-orange-500 rounded-full
+             hover:bg-orange-500 hover:text-white transition-all duration-200">
+                <lucide-icon [img]="RefreshCw" class="w-4 h-4"></lucide-icon>
+                <span>Actualizar</span>
+              </button>
+
+              <button
+                (click)="abrirModalEditar(p)"
+                class="flex items-center gap-2 px-3 py-2 text-xs border border-yellow-500 text-yellow-600 rounded-full
+             hover:bg-yellow-500 hover:text-white transition-all duration-200">
+                <lucide-icon [img]="Pencil" class="w-4 h-4"></lucide-icon>
+                <span>Editar</span>
+              </button>
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-modal-edicion
+  [visible]="modalVisible"
+  [posgraduante]="posgraduanteSeleccionado"
+  (cerrar)="cerrarModal()"
+  (actualizar)="guardarCambios($event)"
+></app-modal-edicion>

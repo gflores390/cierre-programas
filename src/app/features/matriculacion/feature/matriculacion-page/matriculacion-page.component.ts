@@ -12,6 +12,7 @@ import {
   ProgramaSelectorComponent,
 } from '../../ui';
 import { StateCardsComponent } from '../../ui/state-cards/state-cards.component';
+import { ReportesComponent } from "../../ui/Reportes/Reportes.component";
 @Component({
   selector: 'app-matriculacion-page',
   standalone: true,
@@ -30,7 +31,8 @@ import { StateCardsComponent } from '../../ui/state-cards/state-cards.component'
     MatriculaToolbarComponent,
     MatriculaTableComponent,
     StateCardsComponent,
-  ],
+    ReportesComponent
+],
   templateUrl: './matriculacion-page.component.html',
 })
 

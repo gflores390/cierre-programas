@@ -23,9 +23,9 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.6602 3.16699C11.8755 3.05656 12.1305 3.05656 12.3458 3.16699L21.5958 7.91699C21.8462 8.04557 22.0036 8.30354 22.0036 8.585C22.0036 8.86646 21.8462 9.12443 21.5958 9.25301L18.75 10.7144V14.5C18.75 15.7426 17.7426 16.75 16.5 16.75H7.5C6.25736 16.75 5.25 15.7426 5.25 14.5V10.7144L3.5 9.81604V14.75C3.5 15.1642 3.16421 15.5 2.75 15.5C2.33579 15.5 2 15.1642 2 14.75V8.585C2 8.30354 2.15743 8.04557 2.40779 7.91699L11.6602 3.16699ZM6.75 11.4844V14.5C6.75 14.9142 7.08579 15.25 7.5 15.25H16.5C16.9142 15.25 17.25 14.9142 17.25 14.5V11.4844L12.3458 14.003C12.1305 14.1134 11.8755 14.1134 11.6602 14.003L6.75 11.4844ZM4.39 8.585L12.003 12.494L19.6131 8.585L12.003 4.67598L4.39 8.585Z" fill="currentColor"></path></svg>`,
     name: 'Matriculación',
     subItems: [
-      { name: 'Lista', path: '/matriculacion' },
-      { name: 'Nueva', path: '/matriculacion#nueva' },
-      { name: 'Reportes', path: '/matriculacion#reportes' },
+      { name: 'Programas', path: '/matriculacion' },
+      { name: 'Posgraduantes', path: '/matriculacion/posgraduantes' },
+      // { name: 'Reportes', path: '/matriculacion#reportes' },
     ],
   },
 ];

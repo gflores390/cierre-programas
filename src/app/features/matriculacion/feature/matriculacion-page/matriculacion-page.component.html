@@ -1,7 +1,7 @@
-<app-page-breadcrumb pageTitle="Matriculación" />
-
- <app-state-cards [data]="stats()"/>
-<div class="flex flex-col gap-6">
+<app-reportes />
+<app-page-breadcrumb class="mb-4" style="color: #2563eb;" pageTitle="LISTA DE PROGRAMAS" />
+<div class="flex flex-col gap-2">
+<app-state-cards [data]="stats()"/>
   <app-programa-selector
     [seleccion]="seleccionPrograma()"
     [programas]="programasFiltrados()"
@@ -13,7 +13,6 @@
     (verDetalle)="onVerDetallePrograma()"
     (descargarListado)="onDescargarListado()"
   />
-
   @if (seleccionPrograma().programa) {
     <div @fadeSlideUp class="card">
       <div class="flex flex-col gap-1 px-5 pt-5 sm:px-6 sm:pt-6">
@@ -21,9 +20,7 @@
         <p class="text-sm text-gray-500 dark:text-gray-400">
           Gestiona las matrículas del año académico {{ filtro().gestion }} · {{ totalFiltradas().length }} resultados
         </p>
-      </div>
-  
-        
+      </div>    
       <app-matricula-toolbar
         [busqueda]="filtro().busqueda"
         [estado]="filtro().estado"
@@ -38,7 +35,6 @@
         (exportar)="onExportar()"
         (abrirFiltros)="onAbrirFiltros()"
       />
-
       <app-matricula-table
         [matriculas]="matriculas()"
         [paginaActual]="pagina()"

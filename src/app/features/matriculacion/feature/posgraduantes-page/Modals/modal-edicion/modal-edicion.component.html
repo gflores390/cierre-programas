@@ -1,0 +1,73 @@
+<!-- Overlay de fondo oscuro -->
+<div
+  *ngIf="visible"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <!-- Caja del modal -->
+  <div class="bg-white rounded-md shadow-lg w-full max-w-2xl mx-4">
+
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center px-6 py-4 border-b">
+      <h2 class="text-gray-600 font-medium tracking-wide">
+        EDICIÓN DE DATOS PERSONALES
+      </h2>
+      <button
+        (click)="onCerrar()"
+        class="text-gray-500 hover:text-gray-700 text-xl leading-none"
+      >
+        &times;
+      </button>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="px-6 py-5">
+
+      <!-- Nombre + CI -->
+      <h3 class="text-blue-600 font-semibold text-lg mb-4" *ngIf="posgraduante">
+        {{ posgraduante.nombre }} - {{ posgraduante.ci }}
+      </h3>
+
+      <!-- Campos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 mb-1">Celular:</label>
+          <input
+            type="text"
+            [(ngModel)]="celular"
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-700 mb-1">Correo Electrónico:</label>
+          <input
+            type="email"
+            [(ngModel)]="correo"
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+      </div>
+
+      <!-- Botón Actualizar -->
+      <div class="flex justify-end mt-4">
+        <button
+          (click)="onActualizar()"
+          class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-full transition"
+        >
+          ⟳ Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- Pie -->
+    <div class="flex justify-end px-6 py-4 border-t">
+      <button
+        (click)="onCerrar()"
+        class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-5 py-2 rounded-full transition"
+      >
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>

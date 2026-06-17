@@ -1,0 +1,67 @@
+<style>
+    .reportes-container {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
+
+    .btn-pdf {
+        background-color: #f85a5a;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-pdf:hover {
+        background-color: #e04545;
+    }
+
+    .btn-pdf:active {
+        transform: scale(0.98);
+    }
+
+    .pdf-icon {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+    }
+</style>
+
+<div class="reportes-container">
+
+    <button type="button" class="btn-pdf" (click)="descargarPorGenero()">
+        <svg class="pdf-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V288H216c-13.3 0-24 10.7-24 24s10.7 24 24 24H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM176 352v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16h32c26.5 0 48 21.5 48 48s-21.5 48-48 48H176zm0-32h16c8.8 0 16-7.2 16-16s-7.2-16-16-16H176v32zm112-16c0-26.5 21.5-48 48-48h16c8.8 0 16 7.2 16 16v112c0 8.8-7.2 16-16 16H336c-26.5 0-48-21.5-48-48V304zm32 48h16V304h-16v48zm112-48h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16h16c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16z" />
+        </svg>
+        Lista de programas por genero
+    </button>
+
+    <button type="button" class="btn-pdf" (click)="descargarPorMes()">
+        <svg class="pdf-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V288H216c-13.3 0-24 10.7-24 24s10.7 24 24 24H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM176 352v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16h32c26.5 0 48 21.5 48 48s-21.5 48-48 48H176zm0-32h16c8.8 0 16-7.2 16-16s-7.2-16-16-16H176v32zm112-16c0-26.5 21.5-48 48-48h16c8.8 0 16 7.2 16 16v112c0 8.8-7.2 16-16 16H336c-26.5 0-48-21.5-48-48V304zm32 48h16V304h-16v48zm112-48h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16h16c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16z" />
+        </svg>
+        Lista de programas por mes
+    </button>
+
+    <button type="button" class="btn-pdf" (click)="descargarGeneral()">
+        <svg class="pdf-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V288H216c-13.3 0-24 10.7-24 24s10.7 24 24 24H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zM176 352v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16h32c26.5 0 48 21.5 48 48s-21.5 48-48 48H176zm0-32h16c8.8 0 16-7.2 16-16s-7.2-16-16-16H176v32zm112-16c0-26.5 21.5-48 48-48h16c8.8 0 16 7.2 16 16v112c0 8.8-7.2 16-16 16H336c-26.5 0-48-21.5-48-48V304zm32 48h16V304h-16v48zm112-48h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16h16c8.8 0 16 7.2 16 16s-7.2 16-16 16H432v16c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16z" />
+        </svg>
+        Generar Lista de programas
+    </button>
+
+</div>

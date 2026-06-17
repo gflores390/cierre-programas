@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 
 export const MATRICULACION_ROUTES: Routes = [
@@ -9,4 +10,11 @@ export const MATRICULACION_ROUTES: Routes = [
       ),
     title: 'Matriculación',
   },
+  {
+    path: 'posgraduantes',
+    loadComponent: () =>
+      import('./feature/posgraduantes-page/posgraduantes-page.component')
+        .then(m => m.PosgraduantesPageComponent),
+    title: 'Posgraduantes',
+  }
 ];
