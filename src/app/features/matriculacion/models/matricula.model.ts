@@ -62,7 +62,7 @@ export interface Matricula {
   estadoCivil?: string;
   domicilio?: string;
   depositos?: Deposito[];
-  tipoPrograma?: TipoPrograma;  // ← aquí
+  tipoPrograma?: TipoPrograma; 
 }
 
 export interface MatriculaFiltro {
@@ -80,9 +80,20 @@ export interface Programa {
   gestion: string;
   sede: string;
   modalidad: string;
-  cupos: number;
-  inscritos: number;
+  cupos?: number;
+  inscritos?: number;
   tipoPrograma?: TipoPrograma;
+  matriculados?: number;
+  preinscritos?: number;
+  numeroModulos?: number;
+  fechaInicio?: string | null;
+  costosMatricula?: number;
+  docente?: string;
+  modulosAsignados?: number;
+  fechaRegistro?: string | null;
+  coordinador?: string;
+  coordinadorWhatsapp?: string;
+  habilitado?: boolean;
 }
 
 export interface SeleccionPrograma {
@@ -99,4 +110,53 @@ export interface ConteoPorTipoPrograma {
   maestria: number;
   doctorado: number;
   postdoctorado: number;
+}
+export interface ProgramaApi {
+  id: number;
+  gestion: number;
+  grado_programa: string;
+  programa: string;
+  version: string;
+  modalidad: string;
+  sede: string;
+  costosMatricula: number[];
+  modulos: {
+    cantidad: number;
+    cantidadConNombramiento: number;
+  };
+  fechaInicio: string;
+  nroParticipantes: {
+    matriculados: number;
+    preinscritos: number;
+  };
+}
+export interface ProgramasApiResponse {
+  status: string;
+  message: string;
+  data: ProgramaApi[];
+  total: number;
+  pagina: number;
+  porPagina: number;
+  totalPaginas: number;
+  timestamp: string;
+}
+
+export interface ParticipanteApi {
+  id_persona: string;
+  ci: string;
+  nombre_completo: string;
+  celular: string | null;
+  registroUniversitario: string;
+  matriculas: Record<string, number>[];
+}
+
+export interface APIResponseParticipantes {
+  status: string;
+  message: string;
+  data: ParticipanteApi[];
+  total: number;
+  pagina: number;
+  porPagina: number;
+  totalPaginas: number;
+  timestamp: string;
 }

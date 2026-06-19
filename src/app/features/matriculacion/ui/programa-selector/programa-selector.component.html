@@ -4,169 +4,246 @@
       1. Seleccione el programa
     </h3>
     @if (programaCompleto()) {
-      <span class="flex h-7 w-7 items-center justify-center rounded-full bg-success-500 text-white">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
+    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-success-500 text-white">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
     }
   </div>
 
   <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
-    <app-select
-      label="Versión"
-      [options]="versiones"
-      [value]="seleccion().version"
-      (valueChange)="versionChange.emit($event)"
-    />
+    <app-select label="Versión" [options]="versiones()" [value]="seleccion().version"
+      (valueChange)="versionChange.emit($event)" />
 
-    <app-select
-      label="Gestión"
-      [options]="gestiones"
-      [value]="seleccion().gestion"
-      (valueChange)="gestionChange.emit($event)"
-    />
-
-    <app-select
-      label="Sede"
-      [options]="sedes"
-      [value]="seleccion().sede"
-      (valueChange)="sedeChange.emit($event)"
-    />
-
-    <app-select
-      label="Modalidad"
-      [options]="modalidades"
-      [value]="seleccion().modalidad"
-      (valueChange)="modalidadChange.emit($event)"
-    />
-
-   
+    <app-select label="Gestión" [options]="gestiones" [value]="seleccion().gestion"
+      (valueChange)="gestionChange.emit($event)" />
+    <app-select label="Sede" [options]="sedes()" [value]="seleccion().sede" (valueChange)="sedeChange.emit($event)" />
+    <app-select label="Modalidad" [options]="modalidades" [value]="seleccion().modalidad"
+      (valueChange)="modalidadChange.emit($event)" />
   </div>
 
   @if (!programaCompleto()) {
-    <div class="mt-5 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-      <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-2.5 dark:border-gray-700">
-        <svg class="shrink-0 text-gray-400 dark:text-gray-500" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <div class="mt-5 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+    <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-2.5 dark:border-gray-700">
+      <svg class="shrink-0 text-gray-400 dark:text-gray-500" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <input type="text" placeholder="Buscar por nombre, turno o modalidad…"
+        class="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none dark:text-gray-200 dark:placeholder-gray-500"
+        [(ngModel)]="busqueda" />
+      @if (busqueda()) {
+      <button type="button"
+        class="shrink-0 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+        (click)="busqueda.set('')" aria-label="Limpiar búsqueda">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
         </svg>
-        <input
-          type="text"
-          placeholder="Buscar por nombre, turno o modalidad…"
-          class="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none dark:text-gray-200 dark:placeholder-gray-500"
-          [(ngModel)]="busqueda"
-        />
-        @if (busqueda()) {
-          <button
-            type="button"
-            class="shrink-0 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
-            (click)="busqueda.set('')"
-            aria-label="Limpiar búsqueda"
-          >
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-            </svg>
-          </button>
-        }
-      </div>
-      @if (programasVisibles().length === 0) {
-        <div class="flex flex-col items-center gap-2 py-10 text-center">
-          <svg class="text-gray-300 dark:text-gray-600" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Sin resultados</p>
-          <p class="text-xs text-gray-400 dark:text-gray-500">
-            {{ busqueda() ? 'No hay programas que coincidan con "' + busqueda() + '".' : 'Ajusta los filtros para ver programas disponibles.' }}
-          </p>
-        </div>
-      } @else {
-        <ul class="divide-y divide-gray-100 dark:divide-gray-700/60">
-          @for (programa of programasVisibles(); track programa.id) {
-            <li class="group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03]">
-              <!-- Info del programa — clickeable para seleccionar -->
-              <div class="min-w-0 flex-1 cursor-pointer" (click)="seleccionarPrograma(programa)">
-                <p class="truncate text-sm font-medium text-gray-800 dark:text-white/90">
-                  {{ programa.nombre }} — Turno {{ programa.turno }}
-                </p>
-                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                  {{ programa.modalidad | titlecase }} · Gestión {{ programa.gestion }}
-                </p>
-              </div>
-              <!-- Cupos -->
-              <div class="shrink-0 text-right">
-                @let disponibles = programa.cupos - programa.inscritos;
-                <p class="text-xs font-semibold"
-                  [class]="disponibles > 5 ? 'text-success-600 dark:text-success-400' : disponibles > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-error-500'">
-                  {{ disponibles > 0 ? disponibles + ' cupos' : 'Sin cupos' }}
-                </p>
-                <p class="text-[11px] text-gray-400 dark:text-gray-500">de {{ programa.cupos }}</p>
-              </div>
-              <!-- Descargar -->
-              <button
-                type="button"
-                class="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-error-200 bg-error-50 px-2.5 py-1.5 text-xs font-medium text-error-600 transition-colors hover:border-error-300 hover:bg-error-100 hover:text-error-700 dark:border-error-500/30 dark:bg-error-500/10 dark:text-error-400 dark:hover:border-error-500/50 dark:hover:bg-error-500/20 dark:hover:text-error-300"
-                title="Descargar listado"
-                (click)="descargarListado.emit()"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Descargar
-              </button>
-              <!-- Seleccionar -->
-              <button
-                type="button"
-                class="shrink-0 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-brand-400 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-300 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
-                (click)="seleccionarPrograma(programa)"
-              >
-                Seleccionar
-              </button>
-            </li>
-          }
-        </ul>
+      </button>
       }
     </div>
-  }
 
-  @if (programaCompleto()) {
-    <div class="mt-5 flex items-center justify-between gap-3 rounded-xl border border-success-200 bg-success-50 px-4 py-3 dark:border-success-500/20 dark:bg-success-500/10">
-      <div class="flex items-center gap-3">
-        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-500 text-white">
-          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <p class="text-sm text-gray-700 dark:text-gray-300">
-          <span class="font-medium text-gray-800 dark:text-white/90">Programa seleccionado:</span>
-          {{ programaCompleto() }}
-        </p>
-      </div>
-      <div class="flex shrink-0 items-center gap-3">
-         <button
-                type="button"
-                class="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
-                title="Descargar listado"
-                (click)="descargarListado.emit()"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Descargar
-              </button>
-              
-        <button
-          type="button"
-          class="shrink-0 text-xs font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
-          (click)="cambiarPrograma()"
-        >
-          Cambiar
-        </button>
+    @if (programasVisibles().length === 0) {
+    <div class="flex flex-col items-center gap-2 py-10 text-center">
+      <svg class="text-gray-300 dark:text-gray-600" width="40" height="40" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Sin resultados</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500">
+        {{ busqueda() ? 'No hay programas que coincidan con "' + busqueda() + '".' : 'Ajusta los filtros para ver
+        programas disponibles.' }}
+      </p>
+    </div>
+    } @else {
 
-
-        
+    <!-- Encabezado de columnas (solo visible en pantallas md+) -->
+    <div
+      class="hidden grid-cols-[1.6fr_1fr_0.9fr_0.9fr_1.3fr] gap-4 border-b border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-600 dark:border-gray-700 dark:bg-white/[0.02] dark:text-gray-300 md:grid">
+      <span>Programa</span>
+      <span>Último módulo con asignación</span>
+      <span>Cantidad de:</span>
+      <span>Fecha</span>
+      <div class="flex items-center justify-between gap-4">
+        <span>Coordinadores:</span>
+        <span>Acciones</span>
       </div>
     </div>
+    <ul class="divide-y divide-gray-100 dark:divide-gray-700/60">
+      @for (programa of programasVisibles(); track programa.id) {
+      <li
+        class="grid grid-cols-1 gap-4 px-4 py-4 transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03] md:grid-cols-[1.6fr_1fr_0.9fr_0.9fr_1.3fr] md:items-start">
+        <!-- Programa -->
+        <div class="min-w-0 cursor-pointer" (click)="seleccionarPrograma(programa)">
+          <p class="text-sm font-semibold leading-snug text-gray-800 dark:text-white/90">
+            {{ programa.tipoPrograma }} EN: {{ programa.nombre }}, Versión: {{ programa.version }}
+          </p>
+          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Gestión: {{ programa.gestion }}
+            <span class="font-medium text-brand-500">{{ programa.modalidad | titlecase }} POSGRADO - {{ programa.sede
+              }}</span>
+          </p>
+          <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            Matrículados: {{ programa.matriculados }}
+          </p>
+          <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            Costo Matrícula: <span class="font-medium text-gray-700 dark:text-gray-300">{{ programa.costosMatricula ?? 0
+              }} Bs.</span>
+          </p>
+          <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            Costo Matrícula: <span class="font-medium text-gray-700 dark:text-gray-300">{{ 300 }} Bs.</span>
+          </p>
+
+        </div>
+        <!-- Docente / módulos -->
+        <div class="min-w-0 space-y-2">
+          <p class="text-xs font-medium text-gray-700 dark:text-gray-300">
+            {{ programa.docente || 'Sin docente asignado' }}
+          </p>
+          <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            Numero de Módulos
+            <span
+              class="rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200">
+              {{ programa.numeroModulos }}
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            Módulos Asignados
+            <span
+              class="rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200">
+              {{ programa.modulosAsignados }}
+            </span>
+          </div>
+        </div>
+        <!-- Matriculados / Preinscritos -->
+        <div class="min-w-0 space-y-2">
+          <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            Matricula:
+            <span
+              class="rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200">
+              {{ programa.matriculados }}
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            Pre-Inscritos:
+            <span
+              class="rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200">
+              {{ programa.preinscritos }}
+            </span>
+          </div>
+        </div>
+        <!-- Fechas + estado -->
+        <div class="min-w-0 space-y-2">
+          <p class="text-xs">
+            <span class="font-medium text-black-500 dark:text-white">Fecha Registro:</span><br />
+            @if (programa.fechaRegistro) {
+            {{ programa.fechaRegistro | date: 'd \'de\' MMMM \'de\' y' }}
+            } @else {
+            <span
+              class="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-500 dark:bg-amber-500/10">
+              Sin Coordinador
+            </span>
+            }
+          </p>
+          <p class="text-xs">
+            <span class="font-medium text-black-500 dark:text-white">Fecha Inicio:</span><br />
+            @if (programa.fechaInicio) {
+            <span class="text-gray-700 dark:text-white/90">
+              {{ programa.fechaInicio | date: 'd \'de\' MMMM \'de\' y' }}
+            </span>
+            } @else {
+            —
+            }
+          </p>
+          <span
+            class="inline-flex rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide transition-colors"
+            [ngClass]="obtenerClasesEstado(programa.matriculados ?? 0)">
+            {{ (programa.matriculados ?? 0) > 0 ? 'Habilitado' : 'Inhabilitado' }}
+          </span>
+        </div>
+        <!-- Coordinador + Acciones -->
+        <div class="min-w-0 space-y-3">
+          @if (programa.coordinador) {
+          <div class="text-xs">
+            <p class="font-medium text-gray-700 dark:text-gray-200">{{ programa.coordinador }}</p>
+            @if (programa.coordinadorWhatsapp) {
+            <p class="mt-0.5 flex items-center gap-1 text-success-600 dark:text-success-400">
+              {{ programa.coordinadorWhatsapp }}
+            </p>
+            }
+          </div>
+          } @else {
+          <p class="text-xs text-gray-400 dark:text-gray-500">Sin coordinador asignado</p>
+          }
+          <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2">
+              <button type="button"
+                class="inline-flex items-center justify-center gap-1.5 w-48 rounded-lg border border-blue-200 bg-transparent px-3 py-1.5 text-xs font-medium text-blue-600 transition-all duration-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 dark:border-blue-500/30 dark:text-blue-400 dark:hover:bg-blue-500/10"
+                (click)="seleccionarPrograma(programa)">
+                Posgraduantes
+              </button>
+              <button type="button"
+                class="inline-flex items-center justify-center gap-1.5 w-48 rounded-lg border border-warning-200 bg-transparent px-3 py-1.5 text-xs font-medium text-warning-600 transition-all duration-200 hover:border-warning-500 hover:bg-warning-50 hover:text-warning-700 dark:border-warning-500/30 dark:text-warning-400 dark:hover:bg-warning-500/10"
+                (click)="verEntregaMatriculas.emit(programa)">
+                Entrega de matrículas
+              </button>
+              <button type="button"
+                class="inline-flex items-center justify-center gap-1.5 w-48 rounded-lg border border-error-200 bg-transparent px-3 py-1.5 text-xs font-medium text-error-600 transition-all duration-200 hover:border-error-500 hover:bg-error-50 hover:text-error-700 dark:border-error-500/30 dark:text-error-400 dark:hover:bg-error-500/10"
+                (click)="descargarListado.emit()">
+                Listar Matriculados en PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+      }
+    </ul>
+    }
+  </div>
+  }
+  @if (programaCompleto()) {
+  <div
+    class="mt-5 flex items-center justify-between gap-3 rounded-xl border border-success-200 bg-success-50 px-4 py-3 dark:border-success-500/20 dark:bg-success-500/10">
+    <div class="flex items-center gap-3">
+      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-500 text-white">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.16699 10.4167L8.33366 14.5834L15.8337 6.25" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <p class="text-sm text-gray-700 dark:text-gray-300">
+        <span class="font-medium text-gray-800 dark:text-white/90">Programa seleccionado:</span>
+        {{ programaCompleto() }}
+      </p>
+    </div>
+    <div class="flex shrink-0 items-center gap-3">
+      <!-- <button type="button"
+        class="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
+        title="Descargar listado" (click)="descargarListado.emit()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Descargar
+      </button> -->
+      <button (click)="volver()">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
   }
 </div>

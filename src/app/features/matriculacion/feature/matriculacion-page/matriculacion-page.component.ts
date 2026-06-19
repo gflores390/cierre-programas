@@ -102,9 +102,13 @@ export class MatriculacionPageComponent {
     this.matriculaService.actualizarGestion(gestion);
   }
   onProgramaChange(programa: Programa | null): void {
-    const nombre = programa ? `${programa.nombre} — Turno ${programa.turno}` : '';
-    this.matriculaService.actualizarSeleccionPrograma({ programa: nombre });
+  const nombre = programa ? programa.nombre : '';
+  this.matriculaService.actualizarSeleccionPrograma({ programa: nombre });
+
+  if (programa) {
+    this.matriculaService.cargarParticipantes(programa.id);
   }
+}
   onVerDetallePrograma(): void {
     console.log('Ver detalle del programa', this.seleccionPrograma());
   }

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalEdicionComponent, Posgraduante } from './Modals/modal-edicion/modal-edicion.component';
+import { ModalActualizarComponent } from './Modals/modal-actualizar/modal-actualizar.component';
 
 import {
   LucideAngularModule,
@@ -12,43 +13,50 @@ import {
 @Component({
   selector: 'app-posgraduantes-page',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, ModalEdicionComponent],
+  imports: [CommonModule, LucideAngularModule, ModalEdicionComponent, ModalActualizarComponent],
   templateUrl: './posgraduantes-page.component.html'
 })
-export class PosgraduantesPageComponent {
-
-  // Íconos para el HTML
+export class PosgraduantesPageComponent implements OnInit {
   readonly Info = Info;
   readonly RefreshCw = RefreshCw;
   readonly Pencil = Pencil;
 
-  // Estado del modal de edición
+  // Estado de los modales
   modalVisible = false;
+  modalActualizarVisible = false;
+
+  // Posgraduante seleccionado para editar o actualizar
   posgraduanteSeleccionado: Posgraduante | null = null;
 
-  posgraduantes: Posgraduante[] = [
-    {
-      ci: '5827351',
-      nombre: 'NEIDA ROJAS JURADO',
-      celular: '71341112',
-      correo: 'neidarojas@gmail.com',
-      fecha: '05 de sep, 1981'
-    },
-    {
-      ci: '8399325 LP',
-      nombre: 'HECTOR ALEJANDRO GOMEZ CARI',
-      celular: '67150273',
-      correo: 'alejandrogomezyjj@hotmail.com',
-      fecha: '23 de jun, 1996'
-    },
-    {
-      ci: '83663316 LP',
-      nombre: 'DANIEL RODRIGO BALTAZAR CHAVEZ',
-      celular: '71206820',
-      correo: 'danielbaltazarch@hotmail.com',
-      fecha: '31 de jul, 2003'
-    }
-  ];
+  // 🌟 LISTA DE DATOS ESTÁTICOS PARA PRUEBAS (Hardcoded)
+  posgraduantes: Posgraduante[] = [];
+
+  ngOnInit(): void {
+    // Llenamos la lista con datos estáticos al iniciar el componente
+    this.posgraduantes = [
+      {
+        ci: '1234567',
+        nombre: 'Juan Carlos Mamani Quispe',
+        celular: '71234567',
+        correo: 'juan.mamani@posgradoupea.edu.bo',
+        fecha: '2025-01-15'
+      },
+      {
+        ci: '7654321',
+        nombre: 'Ana María Flores Choque',
+        celular: '69876543',
+        correo: 'ana.flores@posgradoupea.edu.bo',
+        fecha: '2025-02-20'
+      },
+      {
+        ci: '8888888',
+        nombre: 'Carlos Javier Condori Cruz',
+        celular: '75554433',
+        correo: 'carlos.condori@posgradoupea.edu.bo',
+        fecha: '2025-03-10'
+      }
+    ];
+  }
 
   // Se llama al hacer clic en el botón "Editar" de una fila
   abrirModalEditar(p: Posgraduante): void {
@@ -57,24 +65,52 @@ export class PosgraduantesPageComponent {
     this.modalVisible = true;
   }
 
+  // Se llama al hacer clic en el botón "Actualizar" de una fila
+  abrirModalActualizar(p: Posgraduante): void {
+    console.log('click actualizar', p);
+    this.posgraduanteSeleccionado = p;
+    this.modalActualizarVisible = true;
+  }
+
   // Se llama al cerrar el modal (botón "Cerrar" o la "x")
   cerrarModal(): void {
     this.modalVisible = false;
+    this.modalActualizarVisible = false;
     this.posgraduanteSeleccionado = null;
   }
 
-  // Se llama cuando el modal emite el evento "actualizar"
-  guardarCambios(datos: { celular: string; correo: string }): void {
+  // Guarda los cambios desde el modal de edición estructural
+  guardarCambios(datos: { celular: string; correo: string; ci: string; nombre: string; fecha: string }): void {
+    if (!this.posgraduanteSeleccionado) return;
+    
+    const index = this.posgraduantes.findIndex(
+      p => p.ci === this.posgraduanteSeleccionado!.ci
+    );
+
+    if (index !== -1) {
+      this.posgraduantes[index] = {
+        ci: datos.ci,
+        nombre: datos.nombre,
+        celular: datos.celular,
+        correo: datos.correo,
+        fecha: datos.fecha
+      };
+    }
+    this.cerrarModal();
+  }
+
+  // Guarda los cambios rápidos del modal de actualización (celular y correo)
+  guardarCambiosActualizar(datos: { celular: string; correo: string }): void {
     if (!this.posgraduanteSeleccionado) return;
 
     const index = this.posgraduantes.findIndex(
       p => p.ci === this.posgraduanteSeleccionado!.ci
     );
-    if (index !== -1) {
-      this.posgraduantes[index].celular = datos.celular;
-      this.posgraduantes[index].correo = datos.correo;
-    }
 
+    if (index !== -1) {
+      this.posgraduantes[index].correo = datos.correo;
+      this.posgraduantes[index].celular = datos.celular;
+    }
     this.cerrarModal();
   }
 }

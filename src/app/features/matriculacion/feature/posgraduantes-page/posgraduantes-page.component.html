@@ -43,8 +43,9 @@
                 <lucide-icon [img]="Info" class="w-4 h-4"></lucide-icon>
                 <span>Información</span>
               </button>
-
-              <button class="flex items-center gap-2 px-3 py-2 text-xs border border-orange-500 text-orange-500 rounded-full
+              <button 
+              (click)="abrirModalActualizar(p)"
+              class="flex items-center gap-2 px-3 py-2 text-xs border border-orange-500 text-orange-500 rounded-full
              hover:bg-orange-500 hover:text-white transition-all duration-200">
                 <lucide-icon [img]="RefreshCw" class="w-4 h-4"></lucide-icon>
                 <span>Actualizar</span>
@@ -65,10 +66,16 @@
     </table>
   </div>
 </div>
-
 <app-modal-edicion
   [visible]="modalVisible"
   [posgraduante]="posgraduanteSeleccionado"
   (cerrar)="cerrarModal()"
   (actualizar)="guardarCambios($event)"
 ></app-modal-edicion>
+
+<app-modal-actualizar
+  [visible]="modalActualizarVisible" 
+  [posgraduante]="posgraduanteSeleccionado"
+  (cerrar)="cerrarModal()"
+  (actualizar)="guardarCambiosActualizar($event)"
+></app-modal-actualizar>

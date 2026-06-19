@@ -18,30 +18,67 @@ export interface Posgraduante {
 })
 export class ModalEdicionComponent implements OnChanges {
 
-  // Controla si el modal se muestra u oculta
   @Input() visible: boolean = false;
-
-  // Datos del posgraduante que se está editando
   @Input() posgraduante: Posgraduante | null = null;
 
-  // Eventos hacia el componente padre
   @Output() cerrar = new EventEmitter<void>();
-  @Output() actualizar = new EventEmitter<{ celular: string; correo: string }>();
+  
+  // Modificado el Output para que también devuelva los apellidos por separado si el padre lo requiere
+  @Output() actualizar = new EventEmitter<{ 
+    celular: string; 
+    correo: string; 
+    ci: string; 
+    nombre: string; 
+    apPaterno: string;
+    apMaterno: string;
+    fecha: string; 
+  }>();
 
-  // Campos editables del formulario
+  ci: string = '';
+  nombre: string = '';
+  apPaterno: string = '';
+  apMaterno: string = '';
   celular: string = '';
   correo: string = '';
+  fecha: string = '';
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Cada vez que cambia el posgraduante recibido, refrescamos los campos
     if (changes['posgraduante'] && this.posgraduante) {
+      this.ci = this.posgraduante.ci;
       this.celular = this.posgraduante.celular;
       this.correo = this.posgraduante.correo;
+      this.fecha = this.posgraduante.fecha; 
+
+      // LÓGICA DE SEPARACIÓN: Si el backend te manda todo en "nombre" (ej: "MARIA ELENA CORI CORONADO")
+      const palabras = this.posgraduante.nombre.trim().split(/\s+/);
+      
+      if (palabras.length >= 3) {
+        // Asumimos que las dos últimas palabras son los apellidos
+        this.apMaterno = palabras.pop() || '';
+        this.apPaterno = palabras.pop() || '';
+        this.nombre = palabras.join(' '); // Lo que queda son los nombres (ej: "MARIA ELENA")
+      } else if (palabras.length === 2) {
+        this.apPaterno = palabras[1];
+        this.apMaterno = '';
+        this.nombre = palabras[0];
+      } else {
+        this.nombre = this.posgraduante.nombre;
+        this.apPaterno = '';
+        this.apMaterno = '';
+      }
     }
   }
 
   onActualizar(): void {
-    this.actualizar.emit({ celular: this.celular, correo: this.correo });
+    this.actualizar.emit({ 
+      celular: this.celular, 
+      correo: this.correo, 
+      ci: this.ci, 
+      nombre: this.nombre, 
+      apPaterno: this.apPaterno,
+      apMaterno: this.apMaterno,
+      fecha: this.fecha 
+    });
   }
 
   onCerrar(): void {

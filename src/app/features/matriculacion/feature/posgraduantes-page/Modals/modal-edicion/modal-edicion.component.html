@@ -1,73 +1,168 @@
-<!-- Overlay de fondo oscuro -->
 <div
   *ngIf="visible"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-sm"
 >
-  <!-- Caja del modal -->
-  <div class="bg-white rounded-md shadow-lg w-full max-w-2xl mx-4">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-3xl mx-4 overflow-hidden border border-gray-200 animate-fade-in">
 
-    <!-- Encabezado -->
-    <div class="flex justify-between items-center px-6 py-4 border-b">
-      <h2 class="text-gray-600 font-medium tracking-wide">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+      <h2 class="text-gray-600 font-medium tracking-wide text-lg">
         EDICIÓN DE DATOS PERSONALES
       </h2>
       <button
         (click)="onCerrar()"
-        class="text-gray-500 hover:text-gray-700 text-xl leading-none"
+        class="text-gray-400 hover:text-gray-600 text-2xl font-semibold leading-none transition-colors"
       >
         &times;
       </button>
     </div>
 
-    <!-- Cuerpo -->
-    <div class="px-6 py-5">
+    <div class="px-8 py-6 max-h-[75vh] overflow-y-auto space-y-5">
+      
+      <div class="flex justify-center items-center gap-2 text-sm text-gray-700 font-medium mb-2">
+        <span>Estado Persona:</span>
+        <span class="bg-blue-600 text-white text-[11px] font-bold px-2 py-0.5 rounded tracking-wider uppercase">
+          Verificado
+        </span>
+      </div>
 
-      <!-- Nombre + CI -->
-      <h3 class="text-blue-600 font-semibold text-lg mb-4" *ngIf="posgraduante">
-        {{ posgraduante.nombre }} - {{ posgraduante.ci }}
-      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">C.I. <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="ci"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-gray-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Expedido <span class="text-red-500">*</span></label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-500 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <option>--seleccione--</option>
+            <option value="LP">La Paz</option>
+            <option value="OR">Oruro</option>
+            <option value="PT">Potosí</option>
+            <option value="CB">Cochabamba</option>
+            <option value="CH">Chuquisaca</option>
+            <option value="TJ">Tarija</option>
+            <option value="SC">Santa Cruz</option>
+            <option value="BE">Beni</option>
+            <option value="PD">Pando</option>
+          </select>
+        </div>
+      </div>
 
-      <!-- Campos -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Nombres <span class="text-red-500">*</span></label>
+        <input
+          type="text"
+          [(ngModel)]="nombre"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
+        />
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-gray-700 mb-1">Celular:</label>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Ap. Paterno <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="apPaterno"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Paterno"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Ap. Materno <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="apMaterno"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Materno"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Fecha Nacimiento <span class="text-red-500">*</span></label>
+          <div class="relative">
+            <input
+              type="text"
+              [(ngModel)]="fecha"
+              class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <span class="absolute right-3 top-2.5 text-gray-400 text-sm">📅</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Estado Civil <span class="text-red-500">*</span></label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <option>Soltero(a)</option>
+            <option>Casado(a)</option>
+            <option>Divorciado(a)</option>
+            <option>Viudo(a)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Celular <span class="text-red-500">*</span></label>
           <input
             type="text"
             [(ngModel)]="celular"
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-
         <div>
-          <label class="block text-gray-700 mb-1">Correo Electrónico:</label>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Celular Referencia</label>
           <input
-            type="email"
-            [(ngModel)]="correo"
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            type="text"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
       </div>
 
-      <!-- Botón Actualizar -->
-      <div class="flex justify-end mt-4">
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Correo <span class="text-red-500">*</span></label>
+        <input
+          type="email"
+          [(ngModel)]="correo"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Ocupación <span class="text-red-500">*</span></label>
+        <input
+          type="text"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Dirección Actual <span class="text-red-500">*</span></label>
+        <input
+          type="text"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Dirección de domicilio"
+        />
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button
+          (click)="onCerrar()"
+          class="px-5 py-2 border border-gray-300 text-gray-600 rounded text-sm hover:bg-gray-50 transition-all font-medium"
+        >
+          Cerrar
+        </button>
         <button
           (click)="onActualizar()"
-          class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-full transition"
+          class="px-5 py-2 bg-[#5c44c4] hover:bg-[#4b35a3] text-white rounded text-sm font-medium shadow-sm transition-all"
         >
-          ⟳ Actualizar
+          Guardar Cambios
         </button>
       </div>
-    </div>
 
-    <!-- Pie -->
-    <div class="flex justify-end px-6 py-4 border-t">
-      <button
-        (click)="onCerrar()"
-        class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-5 py-2 rounded-full transition"
-      >
-        Cerrar
-      </button>
     </div>
-
   </div>
 </div>
