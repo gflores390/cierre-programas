@@ -22,10 +22,10 @@ export class UserDropdownComponent {
     this.isOpen = false;
   }
 
- async logout() {
+  async logout() {
     this.closeDropdown();
     await this.keycloak.logout({
-      redirectUri: window.location.origin
+      redirectUri: `${window.location.origin}/`
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+﻿import { Routes } from '@angular/router';
 import { AppLayoutComponent } from './shared/layout/app-layout/app-layout.component';
 import { NotFoundComponent } from './pages/other-page/not-found/not-found.component';
 
@@ -20,6 +20,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/matriculacion/matriculacion.routes').then(
             (m) => m.MATRICULACION_ROUTES,
+          ),
+      },
+      {
+        path: 'formularios',
+        loadChildren: () =>
+          import('./features/formularios/formularios.routes').then(
+            (m) => m.FORMULARIOS_ROUTES,
           ),
       },
     ],

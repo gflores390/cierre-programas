@@ -1,0 +1,42 @@
+import { InformeDescuentoData } from '../models/informe-descuento.model';
+
+export const INFORME_DESCUENTO_MOCK: InformeDescuentoData = {
+  lugarFecha: 'El Alto, julio de 2026',
+  destinatario: {
+    tratamiento: 'Señor:',
+    nombre: 'Dr. Richard Jorge Torrez Juaniquina Ph.D',
+    cargo: 'DIRECTOR DE POSTGRADO',
+    institucion: 'UNIVERSIDAD PÚBLICA DE EL ALTO',
+  },
+  referencia: 'INFORME DE DESCUENTO DEL PROGRAMA DIPLOMADO EN ADMINISTRACIÓN DE SERVIDORES GNU/LINUX VERSIÓN II MODALIDAD VIRTUAL.',
+  programa: 'DIPLOMADO EN ADMINISTRACIÓN DE SERVIDORES GNU/LINUX',
+  version: 'VERSIÓN II',
+  modalidad: 'MODALIDAD VIRTUAL',
+  textoExplicativo: 'El programa opto el descuento del 30% de descuento el cual aplica el pago al contado, en dos cuotas.',
+  beneficiarios: [
+    { nro: 1, apellidoPaterno: 'BARRIOS', apellidoMaterno: 'GRANADOS', nombres: 'JUAN CARLOS', ci: '5942879', colegiatura: 980, porcentajeDescuento: '30%' },
+    { nro: 2, apellidoPaterno: 'CALLE', apellidoMaterno: 'LAIME', nombres: 'ESAU ADOLFO', ci: '8311010', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 3, apellidoPaterno: 'CAMACHO', apellidoMaterno: 'BALDERRAMA', nombres: 'PATRICIA SCARLEN', ci: '3619282', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 4, apellidoPaterno: 'CARVALLO', apellidoMaterno: 'QUIROGA', nombres: 'PABLO ALBERTO', ci: '7356222', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 5, apellidoPaterno: 'CHUQUIMIA', apellidoMaterno: 'CONDORI', nombres: 'JUAN CARLOS', ci: '4360467', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 6, apellidoPaterno: 'CONDORI', apellidoMaterno: 'QUISPE', nombres: 'AXEL SIMON', ci: '9924575', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 7, apellidoPaterno: 'CUSI', apellidoMaterno: 'CONDORI', nombres: 'MARCELO JOSÉ', ci: '5962510', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 8, apellidoPaterno: 'DEL CASTILLO', apellidoMaterno: 'VARGAS', nombres: 'PEDRO LUIS ROBERTO', ci: '5283874', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 9, apellidoPaterno: 'GUERRERO', apellidoMaterno: 'ROSPILLOSA', nombres: 'MAIRA', ci: '7137940', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 10, apellidoPaterno: 'HUACARA', apellidoMaterno: 'CHOQUE', nombres: 'GABRIEL', ci: '8279250', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 11, apellidoPaterno: 'LLANOS', apellidoMaterno: 'TINTAYA', nombres: 'ABDIEL', ci: '9246339', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 12, apellidoPaterno: 'MAMANI', apellidoMaterno: 'GUAJLLIRE', nombres: 'ADOLFO', ci: '4333068', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 13, apellidoPaterno: 'MERCADO', apellidoMaterno: 'ALARCON', nombres: 'JOSE LUIS', ci: '8174701', colegiatura: 980, porcentajeDescuento: '30%' },
+    { nro: 14, apellidoPaterno: 'MURIEL', apellidoMaterno: 'RUEDA', nombres: 'SYBIL MELISSA', ci: '5720667', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 15, apellidoPaterno: 'PAUCARA', apellidoMaterno: 'FLORES', nombres: 'ROGER', ci: '9233975', colegiatura: 1960, porcentajeDescuento: '30%' },
+    { nro: 16, apellidoPaterno: 'RODRIGUEZ', apellidoMaterno: 'CALVI', nombres: 'DIEGO ALEJANDRO', ci: '8051496', colegiatura: 980, porcentajeDescuento: '30%' },
+    { nro: 17, apellidoPaterno: 'SOLIZ', apellidoMaterno: 'MAYSER', nombres: 'ROBERTO EULOGIO', ci: '4711042', colegiatura: 980, porcentajeDescuento: '30%' },
+    { nro: 18, apellidoPaterno: 'VILLARROEL', apellidoMaterno: 'COCA', nombres: 'SEIR GERSON', ci: '7866138', colegiatura: 980, porcentajeDescuento: '30%' },
+  ],
+  responsable: {
+    nombre: 'Lic. EDWIN CHAMBI GUTIERREZ',
+    cargo: 'RESPONSABLE DE PROGRAMA',
+    programa: 'DIPLOMADO EN ADMINISTRACIÓN DE SERVIDORES GNU/LINUX',
+    versionModalidad: 'VERSIÓN II - VIRTUAL',
+  },
+};

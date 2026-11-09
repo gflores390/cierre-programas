@@ -1,0 +1,24 @@
+.tabla-contenedor-posgrado {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px dashed rgba(1, 110, 183, 0.7);
+  border-top: none;
+}
+
+.cabecera-azul-posgrado {
+  background-color: #016EB7;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.borde-interdelineado {
+  border-style: dashed;
+  border-width: 1px;
+  border-color: rgba(1, 110, 183, 0.7);
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}

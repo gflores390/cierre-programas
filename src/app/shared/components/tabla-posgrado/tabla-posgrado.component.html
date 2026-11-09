@@ -1,0 +1,64 @@
+﻿<div class="w-full tabla-contenedor-posgrado bg-white shadow-sm dark:bg-gray-900">
+  
+  <!-- CABECERA AZUL #016EB7 -->
+  @if (titulo) {
+    <div class="cabecera-azul-posgrado flex items-center justify-between px-4 py-2.5 text-white">
+      <span class="text-xs sm:text-sm font-bold uppercase tracking-wider">
+        {{ titulo }}
+      </span>
+      @if (subtitulo) {
+        <span class="text-[11px] font-medium text-blue-100/90">
+          {{ subtitulo }}
+        </span>
+      }
+    </div>
+  }
+
+  <!-- TABLA CON LÍNEAS INTERDELINEADAS -->
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-xs text-gray-800 dark:text-gray-200">
+      
+      <!-- ENCABEZADOS DE COLUMNA -->
+      <thead class="cabecera-azul-posgrado text-white uppercase text-[11px] font-bold">
+        <tr>
+          @for (col of columnas; track col.campo; let last = $last) {
+            <th scope="col"
+              [style.width]="col.ancho || 'auto'"
+              class="px-3 py-2.5 borde-interdelineado border-b"
+              [class.border-r]="!last"
+              [class.text-center]="col.align === 'center'"
+              [class.text-right]="col.align === 'right'"
+              [class.text-left]="!col.align || col.align === 'left'"
+              [style.backgroundColor]="col.headerBg || null"
+              [style.color]="col.headerBg ? '#000000' : null">
+              {{ col.etiqueta }}
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <!-- FILAS CON BORDES INTERDELINEADOS -->
+      <tbody>
+        @for (fila of datos; track $index; let lastRow = $last) {
+          <tr class="transition-colors hover:bg-blue-50/50 dark:hover:bg-slate-800/40">
+            @for (col of columnas; track col.campo; let lastCol = $last) {
+              <td class="px-3 py-2 text-[11px] borde-interdelineado"
+                [class.border-b]="!lastRow"
+                [class.border-r]="!lastCol"
+                [class.text-center]="col.align === 'center'"
+                [class.text-right]="col.align === 'right'"
+                [class.text-left]="!col.align || col.align === 'left'"
+                [class.bg-[#f2dcdb]]="esReprobado(fila[col.campo], col.esNota)"
+                [class.text-[#c00000]]="esReprobado(fila[col.campo], col.esNota)"
+                [class.font-bold]="esReprobado(fila[col.campo], col.esNota)">
+                {{ fila[col.campo] }}
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+
+    </table>
+  </div>
+
+</div>
